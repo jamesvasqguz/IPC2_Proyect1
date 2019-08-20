@@ -1,0 +1,64 @@
+
+CREATE TABLE Paquete(
+id_paquete INT AUTO_INCREMENT NOT NULL,
+nit_cliente VARCHAR(50) NOT NULL,
+peso DECIMAL NOT NULL,
+destino VARCHAR(50) NOT NULL,
+fecha_ingreso DATETIME NOT NULL,
+prioridad BOOLEAN NOT NULL,
+KEY(prioridad),
+estado_paquete VARCHAR(50) NOT NULL,
+costo DECIMAL NOT NULL,
+CONSTRAINT PK_ID_PAQUETE PRIMARY KEY(id_paquete),
+CONSTRAINT FK_NIT_CLIENTE FOREIGN KEY(nit_cliente)
+REFERENCES Clientes(nit_cliente)
+);
+
+CREATE TABLE Usuario(
+id_usuario INT AUTO_INCREMENT NOT NULL,
+nombre_usuario VARCHAR(50) NOT NULL,
+username VARCHAR(50) NOT NULL, 
+password VARCHAR(50) NOT NULL, 
+tipo_nivel VARCHAR(50) NOT NULL, 
+estado VARCHAR(50) NOT NULL,
+CONSTRAINT PK_ID_USUARIO PRIMARY KEY(id_usuario)
+);
+
+CREATE TABLE Clientes(
+id_cliente INT AUTO_INCREMENT NOT NULL,
+nit_cliente VARCHAR(50) NOT NULL,
+nombre_cliente VARCHAR(50) NOT NULL,
+CONSTRAINT PK_NIT_CLIENTE PRIMARY KEY(nit_cliente),
+KEY(id_cliente)
+); 
+
+CREATE TABLE DetallePaquete(
+id_paquete INT AUTO_INCREMENT NOT NULL,
+cuota DECIMAL NOT NULL,
+cantidad_venta INT NOT NULL,
+CONSTRAINT PK_CUOTA PRIMARY KEY(cuota),
+CONSTRAINT FK_ID_PAQUETE FOREIGN KEY(id_paquete)
+REFERENCES Paquete(id_paquete)
+);
+
+CREATE TABLE Rutas(
+id_rutas INT AUTO_INCREMENT NOT NULL,
+nombre_ruta VARCHAR(50) NOT NULL,
+estado_ruta VARCHAR(50) NOT NULL, 	
+CONSTRAINT PK_ID_RUTAS PRIMARY KEY(id_rutas),
+destino VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE PuntoControl(
+id_punto INT AUTO_INCREMENT NOT NULL,
+id_rutas INT NOT NULL,
+id_usuario INT NOT NULL,
+nombre_punto VARCHAR(50) NOT NULL,
+estado_punto VARCHAR(20) NOT NULL,
+precio_hora DECIMAL NOT NULL,
+CONSTRAINT PK_ID_PUNTO PRIMARY KEY(id_punto),
+CONSTRAINT FK_ID_RUTAS FOREIGN KEY(id_rutas)
+REFERENCES Rutas(id_rutas),
+CONSTRAINT FK_ID_USUARIO FOREIGN KEY(id_usuario)
+REFERENCES Usuario(id_usuario)
+);
