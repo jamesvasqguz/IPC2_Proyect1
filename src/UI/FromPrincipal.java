@@ -51,9 +51,9 @@ public class FromPrincipal extends javax.swing.JFrame {
         jPanel1.add(jLabel1);
         jLabel1.setBounds(150, 20, 350, 320);
 
-        jLabel2.setText("Ingrese nombre del Usuario");
+        jLabel2.setText("Ingrese su username:");
         jPanel1.add(jLabel2);
-        jLabel2.setBounds(30, 360, 170, 30);
+        jLabel2.setBounds(30, 360, 230, 30);
 
         btn_Ingresar.setText("INGRESAR");
         btn_Ingresar.addActionListener(new java.awt.event.ActionListener() {

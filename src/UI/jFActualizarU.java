@@ -70,7 +70,7 @@ public class jFActualizarU extends javax.swing.JFrame {
         lblPassword = new javax.swing.JLabel();
         lblNivel = new javax.swing.JLabel();
         lblEstado = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnActualizarU = new javax.swing.JButton();
         cmbActualizarNi = new javax.swing.JComboBox<>();
         txtActualizarID = new javax.swing.JTextField();
         txtActualizarNom = new javax.swing.JTextField();
@@ -112,14 +112,14 @@ public class jFActualizarU extends javax.swing.JFrame {
         jPanel1.add(lblEstado);
         lblEstado.setBounds(390, 210, 180, 15);
 
-        jButton1.setText("Actualizar Datos");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnActualizarU.setText("Actualizar Datos");
+        btnActualizarU.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnActualizarUActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1);
-        jButton1.setBounds(410, 350, 150, 60);
+        jPanel1.add(btnActualizarU);
+        btnActualizarU.setBounds(410, 350, 150, 60);
 
         cmbActualizarNi.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administrador", "Operador", "Recepcionista", " " }));
         jPanel1.add(cmbActualizarNi);
@@ -173,7 +173,7 @@ public class jFActualizarU extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtActualizarNomActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnActualizarUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarUActionPerformed
         int permisos_cmb, estatus_cmb, validacion=0;
         String nombre, username, pass, permisos_string="", estado_string="";
         
@@ -182,6 +182,7 @@ public class jFActualizarU extends javax.swing.JFrame {
         pass = txtActualizarPass.getText().trim();
         permisos_cmb= cmbActualizarNi.getSelectedIndex() +1;
         estatus_cmb= cmbActualizarE.getSelectedIndex()+1;
+        
         if(nombre.equals("")){
         txtActualizarNom.setBackground(Color.red);
         validacion++;
@@ -241,12 +242,12 @@ public class jFActualizarU extends javax.swing.JFrame {
         }
         
         
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnActualizarUActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnActualizarU;
     private javax.swing.JComboBox<String> cmbActualizarE;
     private javax.swing.JComboBox<String> cmbActualizarNi;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblEstado;

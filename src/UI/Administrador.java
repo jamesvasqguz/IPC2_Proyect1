@@ -108,7 +108,7 @@ public class Administrador extends javax.swing.JFrame {
         jPanel1.add(btnPuntosControl);
         btnPuntosControl.setBounds(50, 300, 120, 100);
 
-        btnAdminOpe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/tecnico.png"))); // NOI18N
+        btnAdminOpe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/checkpoint-3-461915.png"))); // NOI18N
         btnAdminOpe.setBorder(null);
         btnAdminOpe.setContentAreaFilled(false);
         btnAdminOpe.addActionListener(new java.awt.event.ActionListener() {
@@ -117,9 +117,9 @@ public class Administrador extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnAdminOpe);
-        btnAdminOpe.setBounds(430, 100, 120, 100);
+        btnAdminOpe.setBounds(240, 300, 120, 100);
 
-        btnAdminRecep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Receptionist.png"))); // NOI18N
+        btnAdminRecep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/route.png"))); // NOI18N
         btnAdminRecep.setBorder(null);
         btnAdminRecep.setContentAreaFilled(false);
         btnAdminRecep.addActionListener(new java.awt.event.ActionListener() {
@@ -139,7 +139,7 @@ public class Administrador extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnRutas);
-        btnRutas.setBounds(240, 300, 120, 100);
+        btnRutas.setBounds(430, 90, 120, 100);
 
         btnColas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/paquetes-png-2-300x200.png"))); // NOI18N
         btnColas.setBorder(null);
@@ -160,13 +160,13 @@ public class Administrador extends javax.swing.JFrame {
         jPanel1.add(jLabel2);
         jLabel2.setBounds(240, 210, 120, 15);
 
-        jLabel3.setText("Gestionar Operador");
+        jLabel3.setText("Gestionar Puntos de Control");
         jPanel1.add(jLabel3);
-        jLabel3.setBounds(430, 210, 130, 15);
+        jLabel3.setBounds(240, 420, 130, 15);
 
-        jLabel4.setText("Gestionar Recepcionista");
+        jLabel4.setText("Gestionar Rutas");
         jPanel1.add(jLabel4);
-        jLabel4.setBounds(620, 210, 150, 15);
+        jLabel4.setBounds(620, 210, 130, 15);
 
         jLabel5.setText("<html>Gestionar Puntos de Control<html>");
         jPanel1.add(jLabel5);
@@ -174,7 +174,7 @@ public class Administrador extends javax.swing.JFrame {
 
         jLabel6.setText("Rutas de Paquetes");
         jPanel1.add(jLabel6);
-        jLabel6.setBounds(240, 410, 120, 15);
+        jLabel6.setBounds(430, 210, 120, 15);
 
         jLabel7.setText("Cola de Paquetes");
         jPanel1.add(jLabel7);
@@ -184,7 +184,10 @@ public class Administrador extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 776, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -195,8 +198,8 @@ public class Administrador extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAdminRecepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminRecepActionPerformed
-     Recepcionista rp = new Recepcionista();
-     rp.setVisible(true);
+    jFGestionarRuta gr= new jFGestionarRuta();
+    gr.setVisible(true);
     }//GEN-LAST:event_btnAdminRecepActionPerformed
 
     private void btnRegistrarUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarUActionPerformed
@@ -225,8 +228,8 @@ public class Administrador extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRutasActionPerformed
 
     private void btnAdminOpeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminOpeActionPerformed
-        Operador op = new Operador();
-        op.setVisible(true);
+        jFGestionarPuntoControl gpc = new jFGestionarPuntoControl();
+        gpc.setVisible(true);
     }//GEN-LAST:event_btnAdminOpeActionPerformed
 
     /**

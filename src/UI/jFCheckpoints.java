@@ -16,7 +16,7 @@ public class jFCheckpoints extends javax.swing.JFrame {
     String user;
     Connection cn = ConectorDB.conexion();
     int precio,cmb_estado = 0, id, numOpe;
-    String ruta, ope, cmb_Estado = "";
+    String nombrePunto, ruta, ope, cmb_Estado = "";
 
     /**
      * Creates new form jFCheckpoints
@@ -120,8 +120,7 @@ public class jFCheckpoints extends javax.swing.JFrame {
         ruta = cmbRuta.getSelectedItem().toString();
         ope = cmbOperador.getSelectedItem().toString();
         precio = Integer.parseInt(txtPrecioHora.getText().trim());
-        System.out.println(ruta);
-        System.out.println(ope);
+        nombrePunto = txtNombrePC.getText().trim();
         try {
             PreparedStatement ps = cn.prepareStatement("SELECT id_rutas FROM Rutas WHERE nombre_ruta = '" + ruta + "'");
             ResultSet rs = ps.executeQuery();
@@ -135,15 +134,17 @@ public class jFCheckpoints extends javax.swing.JFrame {
             numOpe = rs1.getInt("id_usuario");
             System.out.println(numOpe);
             }
-            PreparedStatement ps2 = cn.prepareStatement("INSERT INTO PuntoControl VALUES(?,?,?,?,?)");
+            PreparedStatement ps2 = cn.prepareStatement("INSERT INTO PuntoControl VALUES(?,?,?,?,?,?)");
             ps2.setInt(1, 0);
             ps2.setInt(2, id);
             ps2.setInt(3, numOpe);
             ps2.setString(4, cmb_Estado);
             ps2.setInt(5, precio);
+            ps2.setString(6, nombrePunto);
             ps2.executeUpdate();
             cn.close();
             txtPrecioHora.setBackground(Color.green);
+            txtNombrePC.setBackground(Color.green);
             JOptionPane.showMessageDialog(null, "Punto de control creado y asignado exitosamente!");
             this.dispose();
         } catch (SQLException e) {

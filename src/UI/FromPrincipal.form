@@ -58,11 +58,11 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Ingrese nombre del Usuario"/>
+            <Property name="text" type="java.lang.String" value="Ingrese su username:"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="30" y="360" width="170" height="30"/>
+              <AbsoluteConstraints x="30" y="360" width="230" height="30"/>
             </Constraint>
           </Constraints>
         </Component>
