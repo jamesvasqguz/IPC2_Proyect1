@@ -160,21 +160,21 @@ public class Administrador extends javax.swing.JFrame {
         jPanel1.add(jLabel2);
         jLabel2.setBounds(240, 210, 120, 15);
 
-        jLabel3.setText("Gestionar Puntos de Control");
+        jLabel3.setText("<html>Gestionar Puntos de Control<html>");
         jPanel1.add(jLabel3);
-        jLabel3.setBounds(240, 420, 130, 15);
+        jLabel3.setBounds(240, 410, 130, 60);
 
         jLabel4.setText("Gestionar Rutas");
         jPanel1.add(jLabel4);
         jLabel4.setBounds(620, 210, 130, 15);
 
-        jLabel5.setText("<html>Gestionar Puntos de Control<html>");
+        jLabel5.setText("<html>Crear Puntos de Control<html>");
         jPanel1.add(jLabel5);
         jLabel5.setBounds(50, 410, 120, 60);
 
-        jLabel6.setText("Rutas de Paquetes");
+        jLabel6.setText("<html>Crear Rutas de Paquetes<html>");
         jPanel1.add(jLabel6);
-        jLabel6.setBounds(430, 210, 120, 15);
+        jLabel6.setBounds(430, 200, 120, 70);
 
         jLabel7.setText("Cola de Paquetes");
         jPanel1.add(jLabel7);
@@ -184,10 +184,7 @@ public class Administrador extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 776, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

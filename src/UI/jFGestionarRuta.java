@@ -1,9 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package UI;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.WindowConstants;
+import Class.ConectorDB;
+import java.sql.Connection;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -11,11 +18,23 @@ package UI;
  */
 public class jFGestionarRuta extends javax.swing.JFrame {
 
-    /**
-     * Creates new form jFGestionarRuta
-     */
+    Connection cn = ConectorDB.conexion();
+    DefaultTableModel model = new DefaultTableModel();
+    public static int actualizarRuta;
+    public static String nombreRuta;
+    public static String destino; 
+            /**
+             * Creates new form jFGestionarRuta
+             */
+
     public jFGestionarRuta() {
         initComponents();
+        setSize(750, 500);
+        setResizable(false);
+        setTitle("Gestionar Rutas");
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        llenarRutas();
     }
 
     /**
@@ -28,53 +47,85 @@ public class jFGestionarRuta extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tableRutas = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
 
         jPanel1.setLayout(null);
+
+        jLabel1.setFont(new java.awt.Font("Bitstream Vera Serif", 3, 24)); // NOI18N
+        jLabel1.setText("Informacion de las Rutas");
+        jPanel1.add(jLabel1);
+        jLabel1.setBounds(180, 20, 370, 40);
+
+        tableRutas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tableRutas);
+
+        jPanel1.add(jScrollPane1);
+        jScrollPane1.setBounds(20, 90, 710, 290);
+
         getContentPane().add(jPanel1);
-        jPanel1.setBounds(0, 0, 650, 500);
+        jPanel1.setBounds(0, 0, 750, 500);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tableRutas;
+    // End of variables declaration//GEN-END:variables
+  public void llenarRutas() {
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
+            PreparedStatement ps = cn.prepareStatement(
+                    "SELECT id_rutas, nombre_ruta, estado_ruta, destino FROM Rutas");
+            ResultSet rs = ps.executeQuery();
+            tableRutas = new JTable(model);
+            jScrollPane1.setViewportView(tableRutas);
+            model.addColumn("ID de la Ruta");
+            model.addColumn("Nombre de la Ruta");
+            model.addColumn("Estado de la Ruta");
+            model.addColumn("Destino de la Ruta");
+            while (rs.next()) {
+                Object[] ob = new Object[4];
+                for (int i = 0; i < ob.length; i++) {
+                    ob[i] = rs.getObject(i + 1);
                 }
+                model.addRow(ob);
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(jFGestionarRuta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(jFGestionarRuta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(jFGestionarRuta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(jFGestionarRuta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            cn.close();
+        } catch (SQLException e) {
+            System.err.println("Error al rellenar la tabla");
+            JOptionPane.showMessageDialog(null, "Error en la conexion DB con la Tabla");
         }
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new jFGestionarRuta().setVisible(true);
+        tableRutas.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int fila_point = tableRutas.rowAtPoint(e.getPoint());
+
+                if (fila_point > -1) {
+                    actualizarRuta = (int) model.getValueAt(fila_point, 0);
+                    nombreRuta = (String) model.getValueAt(fila_point, 1);
+                    destino = (String) model.getValueAt(fila_point, 3);
+                    jFActualizarRuta ar = new jFActualizarRuta();
+                    ar.setVisible(true);
+                }
             }
         });
     }
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel jPanel1;
-    // End of variables declaration//GEN-END:variables
 }

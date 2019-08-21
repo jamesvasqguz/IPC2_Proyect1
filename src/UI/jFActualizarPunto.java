@@ -159,6 +159,9 @@ public class jFActualizarPunto extends javax.swing.JFrame {
         try {
             PreparedStatement ps1 = cn.prepareStatement(
                     "DELETE FROM PuntoControl WHERE id_punto='"+jFGestionarPuntoControl.idPunto+"'");
+            ps1.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Punto de Control Eliminado con exito!");
+            
             
         } catch (SQLException e) {
             System.err.println("Error al borrar Punto de control " +e);

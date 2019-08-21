@@ -23,7 +23,7 @@ public class jFCheckpoints extends javax.swing.JFrame {
      */
     public jFCheckpoints() {
         initComponents();
-        setTitle("Registrar Usuario");
+        setTitle("Crear Punto de Control");
         setSize(650, 500);
         setResizable(false);
         setLocationRelativeTo(null);
