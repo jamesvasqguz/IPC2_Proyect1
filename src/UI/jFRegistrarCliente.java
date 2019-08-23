@@ -11,7 +11,9 @@ import javax.swing.WindowConstants;
 public class jFRegistrarCliente extends javax.swing.JFrame {
     String user;
     Connection cn = ConectorDB.conexion();
-    /**
+    
+    public static String nombre, nitCliente;
+        /**
      * Creates new form jFRegistrarCliente
      */
     public jFRegistrarCliente() {
@@ -100,10 +102,10 @@ public class jFRegistrarCliente extends javax.swing.JFrame {
     
     public void aggCliente(){
         int validacion = 0;
-        String nombre, nitCliente;
         
         nombre = txtNombreCliente.getText().trim();
         nitCliente = txtNitCliente.getText().trim();
+    
         
         if (nombre.equals("")) {
             txtNombreCliente.setBackground(Color.red);

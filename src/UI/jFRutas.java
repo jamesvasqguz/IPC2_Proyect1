@@ -1,21 +1,26 @@
 package UI;
+
 import java.sql.*;
 import Class.ConectorDB;
 import java.awt.Color;
 import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
+
 /**
  *
  * @author jara
  */
 public class jFRutas extends javax.swing.JFrame {
+
     String user;
+    Connection cn = ConectorDB.conexion();
+
     /**
      * Creates new form jFRutas
      */
     public jFRutas() {
         initComponents();
-        setSize(650, 500);
+        setSize(700, 500);
         setResizable(false);
         setTitle("Crear Rutas");
         setLocationRelativeTo(null);
@@ -41,6 +46,12 @@ public class jFRutas extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         cmbEstadoRuta = new javax.swing.JComboBox<>();
         btnCrearRuta = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        txtPrecioDestino = new javax.swing.JTextField();
+        txtPrecioLibra = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        txtPrecioPrio = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
@@ -66,11 +77,11 @@ public class jFRutas extends javax.swing.JFrame {
 
         jLabel5.setText("Estado de la Ruta:");
         jPanel1.add(jLabel5);
-        jLabel5.setBounds(350, 90, 140, 15);
+        jLabel5.setBounds(30, 250, 140, 15);
 
         cmbEstadoRuta.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activo", "Inactivo" }));
         jPanel1.add(cmbEstadoRuta);
-        cmbEstadoRuta.setBounds(350, 110, 102, 32);
+        cmbEstadoRuta.setBounds(30, 270, 102, 32);
 
         btnCrearRuta.setText("Crear Ruta");
         btnCrearRuta.addActionListener(new java.awt.event.ActionListener() {
@@ -79,10 +90,28 @@ public class jFRutas extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnCrearRuta);
-        btnCrearRuta.setBounds(200, 300, 190, 80);
+        btnCrearRuta.setBounds(230, 360, 190, 80);
+
+        jLabel4.setText("Precio del Destino:");
+        jPanel1.add(jLabel4);
+        jLabel4.setBounds(350, 90, 130, 15);
+        jPanel1.add(txtPrecioDestino);
+        txtPrecioDestino.setBounds(350, 110, 110, 32);
+        jPanel1.add(txtPrecioLibra);
+        txtPrecioLibra.setBounds(350, 190, 110, 32);
+
+        jLabel6.setText("Precio x Libra:");
+        jPanel1.add(jLabel6);
+        jLabel6.setBounds(350, 170, 120, 15);
+
+        jLabel7.setText("Precio de Priorizacion:");
+        jPanel1.add(jLabel7);
+        jLabel7.setBounds(350, 250, 150, 15);
+        jPanel1.add(txtPrecioPrio);
+        txtPrecioPrio.setBounds(350, 270, 110, 32);
 
         getContentPane().add(jPanel1);
-        jPanel1.setBounds(0, 0, 650, 500);
+        jPanel1.setBounds(0, 0, 700, 500);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -97,36 +126,42 @@ public class jFRutas extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField txtDestino;
     private javax.swing.JTextField txtNombreR;
+    private javax.swing.JTextField txtPrecioDestino;
+    private javax.swing.JTextField txtPrecioLibra;
+    private javax.swing.JTextField txtPrecioPrio;
     // End of variables declaration//GEN-END:variables
 
-    public void crearRuta(){
-    String nombre, destino, cmbEstado="";
-    int cmb_Estado, validacion=0;
-        
+    public void crearRuta() {
+        String nombre, destino, cmbEstado = "";
+        int cmb_Estado, validacion = 0, precioPriorizacion;
+        float precioDestino, precioLibra;
         nombre = txtNombreR.getText().trim();
         destino = txtDestino.getText().trim();
         cmb_Estado = cmbEstadoRuta.getSelectedIndex() + 1;
-        
+        precioDestino = Float.parseFloat(txtPrecioDestino.getText().trim());
+        precioLibra = Float.parseFloat(txtPrecioLibra.getText().trim());
+        precioPriorizacion = Integer.parseInt(txtPrecioPrio.getText().trim());
         if (nombre.equals("")) {
             txtNombreR.setBackground(Color.red);
             validacion++;
-        }  
+        }
         if (destino.equals("")) {
             txtDestino.setBackground(Color.red);
             validacion++;
         }
-        
         if (cmb_Estado == 1) {
             cmbEstado = "Activo";
         } else if (cmb_Estado == 2) {
-            cmbEstado= "Inactivo";
-        } 
+            cmbEstado = "Inactivo";
+        }
         try {
-            Connection cn = ConectorDB.conexion();
             PreparedStatement ps = cn.prepareStatement(
                     "SELECT nombre_ruta FROM Rutas WHERE nombre_ruta='"
                     + nombre + "'");
@@ -140,16 +175,22 @@ public class jFRutas extends javax.swing.JFrame {
                 if (validacion == 0) {
                     try {
                         Connection cn1 = ConectorDB.conexion();
-                        PreparedStatement ps1 = cn1.prepareStatement("INSERT INTO Rutas VALUES(?,?,?,?)");
-                        ps1.setInt(1,0);
+                        PreparedStatement ps1 = cn1.prepareStatement("INSERT INTO Rutas VALUES(?,?,?,?,?,?,?)");
+                        ps1.setInt(1, 0);
                         ps1.setString(2, nombre);
                         ps1.setString(3, cmbEstado);
                         ps1.setString(4, destino);
+                        ps1.setFloat(5, precioLibra);
+                        ps1.setFloat(6, precioDestino);
+                        ps1.setInt(7, precioPriorizacion);
                         ps1.executeUpdate();
                         cn1.close();
                         clear();
                         txtNombreR.setBackground(Color.green);
                         txtDestino.setBackground(Color.green);
+                        txtPrecioDestino.setBackground(Color.green);
+                        txtPrecioLibra.setBackground(Color.green);
+                        txtPrecioPrio.setBackground(Color.green);
                         JOptionPane.showMessageDialog(null, "Ruta creada exitosamente!");
                         this.dispose();
                     } catch (SQLException e) {
@@ -158,20 +199,23 @@ public class jFRutas extends javax.swing.JFrame {
                     }
                 } else {
                     JOptionPane.showMessageDialog(null, "Campos incompletos!! \n Ingrese todos los datos.");
-                    
+
                 }
-                
+
             }
         } catch (SQLException e) {
             System.err.println("Error al validar ruta" + e);
             JOptionPane.showMessageDialog(null, "Error al comparar ruta!");
         }
-    }                                    
-    
-  public void clear() {
+    }
+
+    public void clear() {
         txtNombreR.setText("");
         txtDestino.setText("");
         cmbEstadoRuta.setSelectedIndex(0);
+        txtPrecioDestino.setText("");
+        txtPrecioLibra.setText("");
+        txtPrecioPrio.setText("");
     }
 
 }

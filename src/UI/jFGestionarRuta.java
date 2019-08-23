@@ -22,7 +22,7 @@ public class jFGestionarRuta extends javax.swing.JFrame {
     DefaultTableModel model = new DefaultTableModel();
     public static int actualizarRuta;
     public static String nombreRuta;
-    public static String destino; 
+    public static String destino;
             /**
              * Creates new form jFGestionarRuta
              */
@@ -92,7 +92,7 @@ public class jFGestionarRuta extends javax.swing.JFrame {
   public void llenarRutas() {
         try {
             PreparedStatement ps = cn.prepareStatement(
-                    "SELECT id_rutas, nombre_ruta, estado_ruta, destino FROM Rutas");
+                    "SELECT id_rutas, nombre_ruta, estado_ruta, destino, precio_libra, precio_destino FROM Rutas");
             ResultSet rs = ps.executeQuery();
             tableRutas = new JTable(model);
             jScrollPane1.setViewportView(tableRutas);
@@ -100,8 +100,10 @@ public class jFGestionarRuta extends javax.swing.JFrame {
             model.addColumn("Nombre de la Ruta");
             model.addColumn("Estado de la Ruta");
             model.addColumn("Destino de la Ruta");
+            model.addColumn("Precio del Destino");
+            model.addColumn("Precio x Libra");
             while (rs.next()) {
-                Object[] ob = new Object[4];
+                Object[] ob = new Object[6];
                 for (int i = 0; i < ob.length; i++) {
                     ob[i] = rs.getObject(i + 1);
                 }

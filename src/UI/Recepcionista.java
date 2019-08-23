@@ -60,8 +60,6 @@ public class Recepcionista extends javax.swing.JFrame {
         btnControlPa = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        btnCobrar = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         btnGestionarCliente = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
@@ -83,7 +81,7 @@ public class Recepcionista extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnRegistrarPa);
-        btnRegistrarPa.setBounds(140, 100, 120, 100);
+        btnRegistrarPa.setBounds(70, 100, 120, 100);
 
         btnControlPa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Control.png"))); // NOI18N
         btnControlPa.setBorder(null);
@@ -95,31 +93,15 @@ public class Recepcionista extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnControlPa);
-        btnControlPa.setBounds(440, 290, 120, 100);
+        btnControlPa.setBounds(490, 100, 120, 100);
 
         jLabel2.setText("Registrar Paquete");
         jPanel1.add(jLabel2);
-        jLabel2.setBounds(150, 200, 120, 15);
+        jLabel2.setBounds(80, 200, 120, 15);
 
         jLabel3.setText("Control de Paquetes");
         jPanel1.add(jLabel3);
-        jLabel3.setBounds(440, 380, 121, 15);
-
-        jLabel4.setText("Cobrar Paquetes");
-        jPanel1.add(jLabel4);
-        jLabel4.setBounds(170, 380, 120, 15);
-
-        btnCobrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/money.png"))); // NOI18N
-        btnCobrar.setBorder(null);
-        btnCobrar.setContentAreaFilled(false);
-        btnCobrar.setPreferredSize(new java.awt.Dimension(120, 100));
-        btnCobrar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCobrarActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnCobrar);
-        btnCobrar.setBounds(160, 290, 120, 100);
+        jLabel3.setBounds(500, 200, 160, 15);
 
         jLabel6.setFont(new java.awt.Font("Dialog", 3, 18)); // NOI18N
         jPanel1.add(jLabel6);
@@ -135,11 +117,11 @@ public class Recepcionista extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnGestionarCliente);
-        btnGestionarCliente.setBounds(430, 100, 120, 100);
+        btnGestionarCliente.setBounds(280, 100, 120, 100);
 
         jLabel5.setText("Gestionar Clientes");
         jPanel1.add(jLabel5);
-        jLabel5.setBounds(440, 200, 120, 15);
+        jLabel5.setBounds(280, 200, 120, 15);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -164,11 +146,6 @@ public class Recepcionista extends javax.swing.JFrame {
         rp.setVisible(true);
     }//GEN-LAST:event_btnRegistrarPaActionPerformed
 
-    private void btnCobrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCobrarActionPerformed
-        jFCobrar co= new jFCobrar();
-        co.setVisible(true);
-    }//GEN-LAST:event_btnCobrarActionPerformed
-
     private void btnGestionarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGestionarClienteActionPerformed
         jFGestionarCliente gc = new jFGestionarCliente();
         gc.setVisible(true);
@@ -179,13 +156,11 @@ public class Recepcionista extends javax.swing.JFrame {
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCobrar;
     private javax.swing.JButton btnControlPa;
     private javax.swing.JButton btnGestionarCliente;
     private javax.swing.JButton btnRegistrarPa;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
