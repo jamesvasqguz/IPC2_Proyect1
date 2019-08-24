@@ -20,7 +20,7 @@ public class ConectorDB {
         String stringConnection = "jdbc:mysql://localhost:3306/Paqueteria";
         try{
             Connection cn = DriverManager.getConnection(stringConnection, user, password);
-            System.out.println("Conexionexitosa:" + cn.getCatalog());     
+               
             return cn;
             }
         catch (SQLException e) {

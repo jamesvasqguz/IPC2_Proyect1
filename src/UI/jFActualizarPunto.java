@@ -14,7 +14,8 @@ import javax.swing.WindowConstants;
  */
 public class jFActualizarPunto extends javax.swing.JFrame {
     String user="",punto="", cmb_Estado, nombreNuevo;
-    int cmb_estado, precioNuevo,opeNuevo,idUsuarioNue;
+    int cmb_estado,opeNuevo,idUsuarioNue, capacidad;
+    float tarifaNu;
     Connection cn = ConectorDB.conexion();
     /**
      * Creates new form jFActualizarPunto
@@ -56,6 +57,8 @@ public class jFActualizarPunto extends javax.swing.JFrame {
         txtNombrePunto = new javax.swing.JTextField();
         cmbNombreOpe = new javax.swing.JComboBox<>();
         btnEliminar = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        txtCant = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setSize(new java.awt.Dimension(650, 500));
@@ -69,7 +72,7 @@ public class jFActualizarPunto extends javax.swing.JFrame {
 
         jLabel2.setText("Nombre del Punto de Control");
         jPanel1.add(jLabel2);
-        jLabel2.setBounds(200, 250, 190, 15);
+        jLabel2.setBounds(210, 300, 190, 15);
 
         jLabel3.setText("Nombre del Operario");
         jPanel1.add(jLabel3);
@@ -106,7 +109,7 @@ public class jFActualizarPunto extends javax.swing.JFrame {
         jPanel1.add(txtPrecio);
         txtPrecio.setBounds(360, 180, 180, 32);
         jPanel1.add(txtNombrePunto);
-        txtNombrePunto.setBounds(140, 270, 340, 32);
+        txtNombrePunto.setBounds(140, 320, 340, 32);
 
         jPanel1.add(cmbNombreOpe);
         cmbNombreOpe.setBounds(30, 180, 270, 32);
@@ -120,6 +123,12 @@ public class jFActualizarPunto extends javax.swing.JFrame {
         jPanel1.add(btnEliminar);
         btnEliminar.setBounds(360, 370, 190, 60);
 
+        jLabel7.setText("Capacidad del Punto:");
+        jPanel1.add(jLabel7);
+        jLabel7.setBounds(240, 230, 170, 15);
+        jPanel1.add(txtCant);
+        txtCant.setBounds(250, 250, 110, 32);
+
         getContentPane().add(jPanel1);
         jPanel1.setBounds(0, 0, 650, 500);
 
@@ -129,9 +138,9 @@ public class jFActualizarPunto extends javax.swing.JFrame {
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
         int validacion=0;
         combo();
-        precioNuevo = Integer.parseInt(txtPrecio.getText().trim());
+        tarifaNu = Float.parseFloat(txtPrecio.getText().trim());
         nombreNuevo = txtNombrePunto.getText().trim();
-        
+        capacidad = Integer.parseInt(txtCant.getText().trim());
         idUsuario();
         if(nombreNuevo.equals("")){
         txtNombrePunto.setBackground(Color.red);
@@ -139,12 +148,13 @@ public class jFActualizarPunto extends javax.swing.JFrame {
         }
             try {
                 PreparedStatement ps2 = cn.prepareStatement(
-                        "UPDATE PuntoControl SET id_usuario=?, estado_punto=?, precio_hora=?, nombre_punto=? " 
+                        "UPDATE PuntoControl SET id_usuario=?, estado_punto=?, nombre_punto=?,tarifa=?, size=? " 
                                 + "WHERE id_punto= '" +jFGestionarPuntoControl.idPunto+ "'");
                 ps2.setInt(1, idUsuarioNue);
                 ps2.setString(2, cmb_Estado);
-                ps2.setInt(3, precioNuevo);
-                ps2.setString(4, nombreNuevo);
+                ps2.setString(3, nombreNuevo);
+                ps2.setFloat(4,tarifaNu);
+                ps2.setInt(5,capacidad);
                 ps2.executeUpdate();
                 cn.close();
                 JOptionPane.showMessageDialog(null, "Punto de Control actualizado correctamente!");
@@ -179,7 +189,9 @@ public class jFActualizarPunto extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JTextField txtCant;
     private javax.swing.JTextField txtNombrePunto;
     private javax.swing.JTextField txtNombreRuta;
     private javax.swing.JTextField txtPrecio;
@@ -191,8 +203,9 @@ public class jFActualizarPunto extends javax.swing.JFrame {
             "SELECT * FROM PuntoControl WHERE nombre_punto ='" +punto+"'");
             ResultSet rs= ps.executeQuery();
             if(rs.next()){
-            txtPrecio.setText(rs.getString("precio_hora"));
-            txtNombrePunto.setText(rs.getString("nombre_punto")); 
+            txtPrecio.setText(rs.getString("tarifa"));
+            txtNombrePunto.setText(rs.getString("nombre_punto"));
+            txtCant.setText(rs.getString("size"));
             cmbEstado.setSelectedItem(rs.getString("estado_punto"));
             }
             

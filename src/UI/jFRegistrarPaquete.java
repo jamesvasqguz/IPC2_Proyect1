@@ -38,7 +38,8 @@ public class jFRegistrarPaquete extends javax.swing.JFrame {
     String localizacion = "";
     String estado_paquete = "";
     int prioridad_cmb;
-
+    int tiempo=0;
+    String ruta="";
     /**
      * Creates new form jFRegistrarPaquete
      */
@@ -215,17 +216,16 @@ public class jFRegistrarPaquete extends javax.swing.JFrame {
     }
 
     public void aggPaquete() {
-        int validacion = 0;
+        int validacion = 0,cantidad = 1;
         boolean prioridad_boolean = true;
         String fecha = ((JTextField) jDFecha.getDateEditor().getUiComponent()).getText();
-        int cantidad = 1;
         nitCliente = txtIDCliente.getText().trim();
         peso = Float.parseFloat(txtPeso.getText().trim());
         prioridad_cmb = cmbPrioridad.getSelectedIndex() + 1;
         cmb_Destino = cmbDestino.getSelectedItem().toString();
         estado_paquete = "No entregado";
         localizacion = "Bodega";
-
+        
         if (nitCliente.equals("")) {
             txtIDCliente.setBackground(Color.red);
             validacion++;
@@ -236,11 +236,12 @@ public class jFRegistrarPaquete extends javax.swing.JFrame {
             prioridad_boolean = false;
         }
         calcPrecio(peso);
+        obtenerRuta();
         System.out.println(peso);
         System.out.println(precio);
         if (validacion == 0) {
             try {
-                PreparedStatement ps1 = cn.prepareStatement("INSERT INTO Paquete VALUES(?,?,?,?,?,?,?,?,?)");
+                PreparedStatement ps1 = cn.prepareStatement("INSERT INTO Paquete VALUES(?,?,?,?,?,?,?,?,?,?,?)");
                 ps1.setInt(1, 0);
                 ps1.setString(2, nitCliente);
                 ps1.setFloat(3, peso);
@@ -250,6 +251,8 @@ public class jFRegistrarPaquete extends javax.swing.JFrame {
                 ps1.setString(7, estado_paquete);
                 ps1.setFloat(8, precio);
                 ps1.setString(9, localizacion);
+                ps1.setInt(10, tiempo);
+                ps1.setString(11,ruta);
                 ps1.executeUpdate();
                 txtIDCliente.setBackground(Color.green);
                 txtPeso.setBackground(Color.green);
@@ -386,5 +389,15 @@ public class jFRegistrarPaquete extends javax.swing.JFrame {
         } catch (DocumentException | HeadlessException | FileNotFoundException e) {
         }
     }
-
+    public void obtenerRuta(){
+    try{
+        PreparedStatement ps3= cn.prepareStatement("SELECT nombre_ruta FROM Rutas WHERE destino ='"+cmb_Destino+"'");
+        ResultSet rs3 = ps3.executeQuery();
+        if(rs3.next()){
+        ruta=rs3.getString("nombre_ruta");
+        }
+    }catch(SQLException e){
+        System.err.println("Error al jalar la ruta " +e);
+    }
+    }
 }

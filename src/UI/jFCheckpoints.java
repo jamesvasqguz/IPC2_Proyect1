@@ -1,10 +1,12 @@
 package UI;
 
+import Class.Cola;
 import java.sql.*;
 import Class.ConectorDB;
 import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
 /**
@@ -15,7 +17,7 @@ public class jFCheckpoints extends javax.swing.JFrame {
 
     String user;
     Connection cn = ConectorDB.conexion();
-    int precio,cmb_estado = 0, id, numOpe;
+    int tarifa, cmb_estado = 0, id, numOpe, size = 0;
     String nombrePunto, ruta, ope, cmb_Estado = "";
 
     /**
@@ -55,6 +57,8 @@ public class jFCheckpoints extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         txtNombrePC = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        txtSize = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
@@ -88,9 +92,9 @@ public class jFCheckpoints extends javax.swing.JFrame {
         jPanel1.add(cmbEstadoControl);
         cmbEstadoControl.setBounds(350, 90, 102, 32);
 
-        jLabel5.setText("Precio x Hora:");
+        jLabel5.setText("Tarifa Global:");
         jPanel1.add(jLabel5);
-        jLabel5.setBounds(350, 160, 100, 15);
+        jLabel5.setBounds(350, 160, 130, 15);
         jPanel1.add(txtPrecioHora);
         txtPrecioHora.setBounds(350, 180, 190, 32);
 
@@ -101,13 +105,19 @@ public class jFCheckpoints extends javax.swing.JFrame {
             }
         });
         jPanel1.add(jButton1);
-        jButton1.setBounds(210, 350, 190, 80);
+        jButton1.setBounds(210, 360, 160, 80);
 
         jLabel6.setText("Nombre del Punto Control");
         jPanel1.add(jLabel6);
-        jLabel6.setBounds(240, 240, 190, 15);
+        jLabel6.setBounds(220, 290, 190, 15);
         jPanel1.add(txtNombrePC);
-        txtNombrePC.setBounds(130, 260, 380, 32);
+        txtNombrePC.setBounds(120, 310, 380, 32);
+
+        jLabel7.setText("Capacidad del Punto Control:");
+        jPanel1.add(jLabel7);
+        jLabel7.setBounds(210, 230, 230, 15);
+        jPanel1.add(txtSize);
+        txtSize.setBounds(250, 250, 100, 32);
 
         getContentPane().add(jPanel1);
         jPanel1.setBounds(0, 0, 660, 490);
@@ -119,38 +129,45 @@ public class jFCheckpoints extends javax.swing.JFrame {
         combo();
         ruta = cmbRuta.getSelectedItem().toString();
         ope = cmbOperador.getSelectedItem().toString();
-        precio = Integer.parseInt(txtPrecioHora.getText().trim());
+        tarifa = Integer.parseInt(txtPrecioHora.getText().trim());
         nombrePunto = txtNombrePC.getText().trim();
+        size = Integer.parseInt(txtSize.getText().trim());
         try {
             PreparedStatement ps = cn.prepareStatement("SELECT id_rutas FROM Rutas WHERE nombre_ruta = '" + ruta + "'");
             ResultSet rs = ps.executeQuery();
-            if(rs.next()){
-            id = rs.getInt("id_rutas");
-            System.out.println(id);
+            if (rs.next()) {
+                id = rs.getInt("id_rutas");
+                System.out.println("El id de la ruta es "+id);
             }
             PreparedStatement ps1 = cn.prepareStatement("SELECT id_usuario FROM Usuario WHERE nombre_usuario='" + ope + "'");
             ResultSet rs1 = ps1.executeQuery();
-            if(rs1.next()){
-            numOpe = rs1.getInt("id_usuario");
-            System.out.println(numOpe);
+            if (rs1.next()) {
+                numOpe = rs1.getInt("id_usuario");
+                System.out.println("El id del usuario es "+numOpe);
             }
-            PreparedStatement ps2 = cn.prepareStatement("INSERT INTO PuntoControl VALUES(?,?,?,?,?,?)");
+            PreparedStatement ps2 = cn.prepareStatement("INSERT INTO PuntoControl VALUES(?,?,?,?,?,?,?)");
             ps2.setInt(1, 0);
             ps2.setInt(2, id);
             ps2.setInt(3, numOpe);
             ps2.setString(4, cmb_Estado);
-            ps2.setInt(5, precio);
-            ps2.setString(6, nombrePunto);
+            ps2.setString(5, nombrePunto);
+            ps2.setInt(6, tarifa);
+            ps2.setInt(7, size);
             ps2.executeUpdate();
-            cn.close();
+            
             txtPrecioHora.setBackground(Color.green);
             txtNombrePC.setBackground(Color.green);
+            txtSize.setBackground(Color.green);
             JOptionPane.showMessageDialog(null, "Punto de control creado y asignado exitosamente!");
             this.dispose();
         } catch (SQLException e) {
             System.err.println("Error al crear nuevo punto de control." + e);
-              JOptionPane.showMessageDialog(null, "Error al registrar punto de control!");
+            JOptionPane.showMessageDialog(null, "Error al registrar punto de control!");
         }
+        Cola c = new Cola(size);
+        c.llenar(nombrePunto,destinoF());
+
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -164,9 +181,11 @@ public class jFCheckpoints extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField txtNombrePC;
     private javax.swing.JTextField txtPrecioHora;
+    private javax.swing.JTextField txtSize;
     // End of variables declaration//GEN-END:variables
 
     public void createCheckpoint() {
@@ -209,6 +228,7 @@ public class jFCheckpoints extends javax.swing.JFrame {
         } catch (Exception e) {
         }
     }
+
     public ArrayList<String> arrayRuta() {
         ArrayList<String> list1 = new ArrayList<String>();
         String dato1 = "SELECT nombre_ruta FROM Rutas";
@@ -231,5 +251,23 @@ public class jFCheckpoints extends javax.swing.JFrame {
         } else if (cmb_estado == 2) {
             cmb_Estado = "Inactivo";
         }
+    }
+
+    public String destinoF() {
+        
+        System.out.println(id);
+        String destinoF = "";
+        try {
+            PreparedStatement ps1 = cn.prepareStatement("SELECT destino FROM Rutas WHERE id_rutas =" +id);
+            ResultSet rs1 = ps1.executeQuery();
+            if (rs1.next()) {
+                System.out.println("Si entre");
+                destinoF = rs1.getString("destino");
+            }
+        } catch (SQLException ex) {
+            System.err.println("Eror "+ex);
+        }
+        System.out.println(destinoF);
+        return destinoF;
     }
 }

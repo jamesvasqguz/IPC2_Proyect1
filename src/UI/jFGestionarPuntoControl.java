@@ -103,7 +103,7 @@ public class jFGestionarPuntoControl extends javax.swing.JFrame {
     public void llenarPuntos() {
         try {
             PreparedStatement ps = cn.prepareStatement(
-                    "SELECT id_punto, id_rutas, id_usuario, estado_punto, precio_hora , nombre_punto FROM PuntoControl");
+                    "SELECT id_punto, id_rutas, id_usuario, estado_punto, nombre_punto, tarifa, size FROM PuntoControl");
             ResultSet rs = ps.executeQuery();
             tablePunto = new JTable(model);
             jScrollPane2.setViewportView(tablePunto);
@@ -111,10 +111,11 @@ public class jFGestionarPuntoControl extends javax.swing.JFrame {
             model.addColumn("ID de la Ruta");
             model.addColumn("ID del Operador");
             model.addColumn("Estado");
-            model.addColumn("Precio x hora");
             model.addColumn("Nombre del Punto");
+            model.addColumn("Tarifa");
+            model.addColumn("Capacidad");
             while (rs.next()) {
-                Object[] ob = new Object[6];
+                Object[] ob = new Object[7];
                 for (int i = 0; i < ob.length; i++) {
                     ob[i] = rs.getObject(i + 1);
                 }
@@ -132,7 +133,7 @@ public class jFGestionarPuntoControl extends javax.swing.JFrame {
                 int fila_point = tablePunto.rowAtPoint(e.getPoint());
                 
                 if (fila_point > -1) {
-                    actualizarPunto = (String)model.getValueAt(fila_point,5);
+                    actualizarPunto = (String)model.getValueAt(fila_point,4);
                     idRuta = (int)model.getValueAt(fila_point,1);
                     idUsuario = (int)model.getValueAt(fila_point,2);
                     idPunto = (int)model.getValueAt(fila_point,0);
