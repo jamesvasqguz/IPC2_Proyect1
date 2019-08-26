@@ -245,9 +245,9 @@ public class jFRegistrarPaquete extends javax.swing.JFrame {
         obtenerRuta();
         System.out.println(peso);
         System.out.println(precio);
-        if (validacion == 0) {
+        
             try {
-                PreparedStatement ps1 = cn.prepareStatement("INSERT INTO Paquete VALUES(?,?,?,?,?,?,?,?,?,?,?)");
+                PreparedStatement ps1 = cn.prepareStatement("INSERT INTO Paquete VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
                 ps1.setInt(1, 0);
                 ps1.setString(2, nitCliente);
                 ps1.setFloat(3, peso);
@@ -259,6 +259,7 @@ public class jFRegistrarPaquete extends javax.swing.JFrame {
                 ps1.setString(9, localizacion);
                 ps1.setInt(10, tiempo);
                 ps1.setString(11, ruta);
+                ps1.setInt(12, 0);
                 ps1.executeUpdate();
                 txtIDCliente.setBackground(Color.green);
                 txtPeso.setBackground(Color.green);
@@ -270,10 +271,6 @@ public class jFRegistrarPaquete extends javax.swing.JFrame {
                 compareNIT();
                 this.dispose();
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "Campos incompletos!! \n Ingrese todos los datos.");
-
-        }
     }
 //Este metodo compara si el nit ingresado por el cliente existe y si no existe llama a la venta registrar cliente la cual permite la creacion de un nuevo cliente
 
