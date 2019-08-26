@@ -11,16 +11,16 @@ public class jFReportes extends javax.swing.JFrame {
     /**
      * Creates new form jFReportes
      */
+    
     public jFReportes() {
         initComponents();
-        setSize(800, 650);
+        setSize(800, 300);
         setResizable(false);
         setTitle("Reportes");
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        Reportes r = new Reportes();
-        jDesktopPane1.add(r);
-        r.show();
+     
+        
     }
     
     /**
@@ -35,7 +35,7 @@ public class jFReportes extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
-        jDesktopPane1 = new javax.swing.JDesktopPane();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
@@ -52,18 +52,40 @@ public class jFReportes extends javax.swing.JFrame {
         jPanel1.add(jComboBox1);
         jComboBox1.setBounds(190, 40, 370, 32);
 
+        jButton1.setText("Seleccionar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton1);
+        jButton1.setBounds(590, 40, 130, 30);
+
         getContentPane().add(jPanel1);
-        jPanel1.setBounds(0, 0, 800, 120);
-        getContentPane().add(jDesktopPane1);
-        jDesktopPane1.setBounds(0, 120, 800, 530);
+        jPanel1.setBounds(0, 0, 800, 650);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        combo();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
+    public void combo(){
+    String cmb=jComboBox1.getSelectedItem().toString();
+    if(cmb=="Paquetes en Ruta"){
+    Reporte1 r1= new Reporte1();
+    r1.setVisible(true);
+    }
+    if(cmb=="Ganancias"){
+    Reporte2 r2= new Reporte2();
+    r2.setVisible(true);
+    }
+    }
 }

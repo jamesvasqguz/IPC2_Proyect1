@@ -1,5 +1,6 @@
 package UI.Operador;
 //Importamos todo lo que necesitaremos
+
 import UI.Inicio.FromPrincipal;
 import Class.Cola;
 import Class.ConectorDB;
@@ -19,13 +20,13 @@ import javax.swing.WindowConstants;
  * @author jara
  */
 public class jFProcesarPaquete extends javax.swing.JFrame {
-    
+
 //Creamos atributos globales para ser utilizados en diferentes metodos 
     String destino = "";
     Connection cn = ConectorDB.conexion();
     float costo;
     int hora;
-    
+
     /**
      * Constructor
      */
@@ -144,12 +145,15 @@ public class jFProcesarPaquete extends javax.swing.JFrame {
             PreparedStatement ps1 = cn.prepareStatement("UPDATE Paquete SET localizacion=?, tiempoRuta=?,costo=? WHERE id_paquete ='" + IdPaquete + "' AND localizacion='" + loca + "'");
             ps1.setString(1, des);
             ps1.setInt(2, calcularHoras());
-            ps1.setFloat(3, calcularCostos());          
+            ps1.setFloat(3, calcularCostos());
             ps1.executeUpdate();
             JOptionPane.showMessageDialog(null, "Paquete paso Correctamente el Punto de Seguridad");
         } catch (SQLException e) {
             System.err.println("Error al actulizar paquete " + e);
         }
+//        if(loca==des){
+//        updateGanancias();
+//        }
         
     }//GEN-LAST:event_btnProcesarActionPerformed
 //Este evento me detecta cuando cambio de item en los combosB
@@ -166,7 +170,7 @@ public class jFProcesarPaquete extends javax.swing.JFrame {
     }//GEN-LAST:event_cmbPuntoControlActionPerformed
 //Este evento permite no ingresar letras en el JTextField perteneciente a las horas que pasa el Paquete en PC
     private void txtHorasKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtHorasKeyTyped
-       char c = evt.getKeyChar();
+        char c = evt.getKeyChar();
         if (c < '0' || c > '9') {
             evt.consume();
         }
@@ -343,7 +347,33 @@ public class jFProcesarPaquete extends javax.swing.JFrame {
         }
         return costoNuevo;
     }
-//    public float calcularGanancias(){
-//    
+
+//    public float calcularGanancias() {
+//        float ganancia = 0, precio, costoFinal;
+//        try {
+//            PreparedStatement ps6 = cn.prepareStatement(
+//                    "SELECT precio, costo FROM Paquete WHERE destino=localizacion");
+//            ResultSet rs6 = ps6.executeQuery();
+//            if (rs6.next()) {
+//                precio = rs6.getFloat("precio");
+//                costoFinal = rs6.getFloat("costo");
+//                ganancia = precio - costoFinal;
+//            }
+//        } catch (SQLException e) {
+//            System.err.println("Error al calcular la ganancia " + e);
+//        }
+//        return ganancia;
+//    }
+//    public void updateGanancias(){
+//        String id = cmbPaquetesCola.getSelectedItem().toString();
+//        String ds = cmbDestino.getSelectedItem().toString();
+//        try {
+//            PreparedStatement ps7= cn.prepareStatement("UPDATE Paquete SET ganancia WHERE id_paquete='"+id+"' AND destino='"+ds+"'");
+//            ps7.setFloat(1, calcularGanancias());
+//            ps7.executeUpdate();
+//            JOptionPane.showMessageDialog(null,"Ganancia obtenida correctamente");
+//        } catch (SQLException e) {
+//            System.err.println("Error al obtener ganancia " +e);
+//        }
 //    }
 }
