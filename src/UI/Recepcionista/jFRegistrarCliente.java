@@ -1,21 +1,26 @@
 package UI.Recepcionista;
+//Importamos las clases y las utilidades que usaremos en la actulizacion del usuario
+
 import UI.Inicio.FromPrincipal;
 import java.sql.*;
 import Class.ConectorDB;
 import java.awt.Color;
 import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
+
 /**
  *
  * @author jara
  */
 public class jFRegistrarCliente extends javax.swing.JFrame {
+
+//Atributos que declaramos globales para poder ser usados en los distintos metodos   
     String user;
     Connection cn = ConectorDB.conexion();
-    
     public static String nombre, nitCliente;
-        /**
-     * Creates new form jFRegistrarCliente
+
+    /**
+     * Constructor
      */
     public jFRegistrarCliente() {
         initComponents();
@@ -23,9 +28,9 @@ public class jFRegistrarCliente extends javax.swing.JFrame {
         setResizable(false);
         setTitle("Registrar Nuevo Cliente");
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);      
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         user = FromPrincipal.user;
-        
+
     }
 
     /**
@@ -58,6 +63,12 @@ public class jFRegistrarCliente extends javax.swing.JFrame {
         jLabel3.setText("Nombre del Cliente:");
         jPanel1.add(jLabel3);
         jLabel3.setBounds(30, 80, 150, 15);
+
+        txtNombreCliente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreClienteKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtNombreCliente);
         txtNombreCliente.setBounds(30, 100, 300, 32);
 
@@ -73,6 +84,12 @@ public class jFRegistrarCliente extends javax.swing.JFrame {
         jLabel2.setText("NIT Cliente:");
         jPanel1.add(jLabel2);
         jLabel2.setBounds(30, 180, 100, 15);
+
+        txtNitCliente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNitClienteKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtNitCliente);
         txtNitCliente.setBounds(30, 200, 300, 32);
 
@@ -81,10 +98,24 @@ public class jFRegistrarCliente extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+//Este boton tiene el evento que al darle click agregue al nuevo cliente a la DB
     private void btnRegistrarClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarClientActionPerformed
-      aggCliente();
+        aggCliente();
     }//GEN-LAST:event_btnRegistrarClientActionPerformed
+//Este evento en el campo donde ingresan el nombre no permite ingresar ningun numero
+    private void txtNombreClienteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreClienteKeyTyped
+        char c = evt.getKeyChar();
+        if (c < 'a' || c > 'z') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtNombreClienteKeyTyped
+//Este evento en el campo donde ingresan el nit no permite agregar letras
+    private void txtNitClienteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNitClienteKeyTyped
+        char c = evt.getKeyChar();
+        if (c < '0' || c > '9') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtNitClienteKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -96,18 +127,19 @@ public class jFRegistrarCliente extends javax.swing.JFrame {
     private javax.swing.JTextField txtNitCliente;
     private javax.swing.JTextField txtNombreCliente;
     // End of variables declaration//GEN-END:variables
+ //Este metodo limpia los campos que fueron llenados durante la creacion del cliente
     public void clear() {
         txtNombreCliente.setText("");
         txtNitCliente.setText("");
-        }
-    
-    public void aggCliente(){
+    }
+//Este metodo permite la creacion de un cliente nuevo
+
+    public void aggCliente() {
         int validacion = 0;
-        
+
         nombre = txtNombreCliente.getText().trim();
         nitCliente = txtNitCliente.getText().trim();
-    
-        
+
         if (nombre.equals("")) {
             txtNombreCliente.setBackground(Color.red);
             validacion++;
@@ -123,7 +155,7 @@ public class jFRegistrarCliente extends javax.swing.JFrame {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 txtNombreCliente.setBackground(Color.red);
-                txtNitCliente.setBackground(Color.red); 
+                txtNitCliente.setBackground(Color.red);
                 JOptionPane.showMessageDialog(null, "Cliente ya existe! \n Prueba con otro");
                 cn.close();
             } else {
@@ -134,7 +166,7 @@ public class jFRegistrarCliente extends javax.swing.JFrame {
                         ps1.setString(2, nitCliente);
                         ps1.setString(3, nombre);
                         ps1.executeUpdate();
-                        
+
                         clear();
                         txtNombreCliente.setBackground(Color.green);
                         txtNitCliente.setBackground(Color.green);

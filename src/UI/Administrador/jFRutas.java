@@ -1,4 +1,5 @@
 package UI.Administrador;
+//Importamos las clases y utilidades que nos serviran en la estructuracion del codigo
 
 import UI.Inicio.FromPrincipal;
 import java.sql.*;
@@ -12,6 +13,7 @@ import javax.swing.WindowConstants;
  * @author jara
  */
 public class jFRutas extends javax.swing.JFrame {
+//Se crean los siguientes atributos globales que usaremos en los diferentes metodos
 
     String user;
     Connection cn = ConectorDB.conexion();
@@ -71,8 +73,20 @@ public class jFRutas extends javax.swing.JFrame {
         jLabel3.setText("Nombre Ruta:");
         jPanel1.add(jLabel3);
         jLabel3.setBounds(30, 90, 100, 15);
+
+        txtDestino.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDestinoKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtDestino);
         txtDestino.setBounds(30, 190, 260, 32);
+
+        txtNombreR.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreRKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtNombreR);
         txtNombreR.setBounds(30, 110, 260, 32);
 
@@ -95,7 +109,13 @@ public class jFRutas extends javax.swing.JFrame {
 
         jLabel4.setText("Precio del Destino:");
         jPanel1.add(jLabel4);
-        jLabel4.setBounds(350, 90, 130, 15);
+        jLabel4.setBounds(350, 90, 210, 15);
+
+        txtPrecioDestino.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrecioDestinoKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtPrecioDestino);
         txtPrecioDestino.setBounds(350, 110, 110, 32);
         jPanel1.add(txtPrecioLibra);
@@ -103,23 +123,41 @@ public class jFRutas extends javax.swing.JFrame {
 
         jLabel6.setText("Precio x Libra:");
         jPanel1.add(jLabel6);
-        jLabel6.setBounds(350, 170, 120, 15);
+        jLabel6.setBounds(350, 170, 210, 15);
 
         jLabel7.setText("Precio de Priorizacion:");
         jPanel1.add(jLabel7);
-        jLabel7.setBounds(350, 250, 150, 15);
+        jLabel7.setBounds(350, 250, 230, 15);
         jPanel1.add(txtPrecioPrio);
         txtPrecioPrio.setBounds(350, 270, 110, 32);
 
         getContentPane().add(jPanel1);
-        jPanel1.setBounds(0, 0, 510, 500);
+        jPanel1.setBounds(0, 0, 730, 500);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+//Este boton tiene el evento de la creacion de la Ruta
     private void btnCrearRutaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearRutaActionPerformed
         crearRuta();
     }//GEN-LAST:event_btnCrearRutaActionPerformed
+//Este evento perimte no ingresar numeros en el nombre de la ruta
+    private void txtNombreRKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreRKeyTyped
+        char c = evt.getKeyChar();
+        if (c < 'a' || c > 'z') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtNombreRKeyTyped
+//Este evento perimte no ingresar numeros en el nombre de la ruta
+    private void txtDestinoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDestinoKeyTyped
+        char c = evt.getKeyChar();
+        if (c < 'a' || c > 'z') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtDestinoKeyTyped
+
+    private void txtPrecioDestinoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioDestinoKeyTyped
+
+    }//GEN-LAST:event_txtPrecioDestinoKeyTyped
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCrearRuta;
@@ -138,7 +176,7 @@ public class jFRutas extends javax.swing.JFrame {
     private javax.swing.JTextField txtPrecioLibra;
     private javax.swing.JTextField txtPrecioPrio;
     // End of variables declaration//GEN-END:variables
-
+//Este metodo contiene las variables, comparacions y codigo que permite la creacion de la ruta
     public void crearRuta() {
         String nombre, destino, cmbEstado = "";
         int cmb_Estado, validacion = 0, precioPriorizacion;
@@ -170,13 +208,11 @@ public class jFRutas extends javax.swing.JFrame {
             if (rs.next()) {
                 txtNombreR.setBackground(Color.red);
                 JOptionPane.showMessageDialog(null, "Ruta ya existe! \n Crea otra ruta");
-                cn.close();
+
             } else {
-                cn.close();
                 if (validacion == 0) {
                     try {
-                        Connection cn1 = ConectorDB.conexion();
-                        PreparedStatement ps1 = cn1.prepareStatement("INSERT INTO Rutas VALUES(?,?,?,?,?,?,?)");
+                        PreparedStatement ps1 = cn.prepareStatement("INSERT INTO Rutas VALUES(?,?,?,?,?,?,?)");
                         ps1.setInt(1, 0);
                         ps1.setString(2, nombre);
                         ps1.setString(3, cmbEstado);
@@ -185,7 +221,6 @@ public class jFRutas extends javax.swing.JFrame {
                         ps1.setFloat(6, precioDestino);
                         ps1.setInt(7, precioPriorizacion);
                         ps1.executeUpdate();
-                        cn1.close();
                         clear();
                         txtNombreR.setBackground(Color.green);
                         txtDestino.setBackground(Color.green);
@@ -200,15 +235,14 @@ public class jFRutas extends javax.swing.JFrame {
                     }
                 } else {
                     JOptionPane.showMessageDialog(null, "Campos incompletos!! \n Ingrese todos los datos.");
-
                 }
-
             }
         } catch (SQLException e) {
             System.err.println("Error al validar ruta" + e);
             JOptionPane.showMessageDialog(null, "Error al comparar ruta!");
         }
     }
+//Este metodo permite que los campos regresen a su estado original
 
     public void clear() {
         txtNombreR.setText("");
@@ -218,5 +252,4 @@ public class jFRutas extends javax.swing.JFrame {
         txtPrecioLibra.setText("");
         txtPrecioPrio.setText("");
     }
-
 }

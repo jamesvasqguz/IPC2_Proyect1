@@ -1,4 +1,5 @@
 package Class;
+//Importamos las clases y las utilidades que usaremos en la actulizacion del usuario
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,7 +12,7 @@ import java.sql.SQLException;
 public class ConectorDB {
        
     /**
-     *
+     *Este metodo retorna una conexion con la base de datos
      * @return
      */
     public static Connection conexion(){
@@ -20,7 +21,6 @@ public class ConectorDB {
         String stringConnection = "jdbc:mysql://localhost:3306/Paqueteria";
         try{
             Connection cn = DriverManager.getConnection(stringConnection, user, password);
-               
             return cn;
             }
         catch (SQLException e) {

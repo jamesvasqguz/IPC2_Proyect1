@@ -26,7 +26,9 @@ public class jFProcesarPaquete extends javax.swing.JFrame {
     float costo;
     int hora;
     
-//Constructor del Form jFProcesarPaquete
+    /**
+     * Constructor
+     */
     public jFProcesarPaquete() {
         initComponents();
         setSize(750, 300);
@@ -71,6 +73,12 @@ public class jFProcesarPaquete extends javax.swing.JFrame {
         });
         jPanel1.add(btnProcesar);
         btnProcesar.setBounds(540, 180, 140, 70);
+
+        txtHoras.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtHorasKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtHoras);
         txtHoras.setBounds(208, 190, 220, 33);
 
@@ -156,6 +164,13 @@ public class jFProcesarPaquete extends javax.swing.JFrame {
     private void cmbPuntoControlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbPuntoControlActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbPuntoControlActionPerformed
+//Este evento permite no ingresar letras en el JTextField perteneciente a las horas que pasa el Paquete en PC
+    private void txtHorasKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtHorasKeyTyped
+       char c = evt.getKeyChar();
+        if (c < '0' || c > '9') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtHorasKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -328,4 +343,7 @@ public class jFProcesarPaquete extends javax.swing.JFrame {
         }
         return costoNuevo;
     }
+//    public float calcularGanancias(){
+//    
+//    }
 }

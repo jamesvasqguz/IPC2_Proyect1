@@ -1,4 +1,6 @@
 package UI.Administrador;
+//Importamos las clases y herramientas que usaremos para mostrar los usuarios en una tabla
+
 import UI.Administrador.jFActualizarU;
 import java.sql.*;
 import Class.ConectorDB;
@@ -15,9 +17,11 @@ import javax.swing.table.DefaultTableModel;
  */
 public class jFGestionarUsuario extends javax.swing.JFrame {
 
+//Atributos globales que usaremos en la construccion de metodos
     String user;
     public static String actualizarU = "";
     DefaultTableModel model = new DefaultTableModel();
+    Connection cn = ConectorDB.conexion();
 
     /**
      * Creates new form jFGestionarUsuario
@@ -29,46 +33,7 @@ public class jFGestionarUsuario extends javax.swing.JFrame {
         setTitle("Gestionar Usuarios");
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-
-        try {
-            Connection cn = ConectorDB.conexion();
-            PreparedStatement ps = cn.prepareStatement(
-                    "SELECT id_usuario, nombre_usuario, username, password, tipo_nivel, estado FROM Usuario");
-            ResultSet rs = ps.executeQuery();
-            jTableUsuarios = new JTable(model);
-            jScrollPane1.setViewportView(jTableUsuarios);
-            model.addColumn("ID_Usuario");
-            model.addColumn("Nombre");
-            model.addColumn("Username");
-            model.addColumn("PassWord");
-            model.addColumn("Nivel");
-            model.addColumn("Estado");
-            while (rs.next()) {
-                Object[] ob = new Object[6];
-                for (int i = 0; i < ob.length; i++) {
-                    ob[i] = rs.getObject(i + 1);
-                }
-                model.addRow(ob);
-            }
-            cn.close();
-        } catch (SQLException e) {
-            System.err.println("Error al rellenar la tabla");
-            JOptionPane.showMessageDialog(null, "Error en la conexion DB con la Tabla");
-        }
-        
-        jTableUsuarios.addMouseListener(new MouseAdapter() {
-           @Override
-           public void mouseClicked(MouseEvent e){
-               int fila_point = jTableUsuarios.rowAtPoint(e.getPoint());
-               int columna_point = 2;
-               if(fila_point>-1){
-                   actualizarU= (String)model.getValueAt(fila_point, columna_point);
-                   jFActualizarU go= new jFActualizarU();
-                   go.setVisible(true);
-               }
-           }
-        
-        });
+        llenarTabla();
     }
 
     /**
@@ -138,4 +103,44 @@ public class jFGestionarUsuario extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableUsuarios;
     // End of variables declaration//GEN-END:variables
+//Este metodo llena la tabla con los usuarios creados 
+    public void llenarTabla() {
+        try {
+            PreparedStatement ps = cn.prepareStatement(
+                    "SELECT id_usuario, nombre_usuario, username, password, tipo_nivel, estado FROM Usuario");
+            ResultSet rs = ps.executeQuery();
+            jTableUsuarios = new JTable(model);
+            jScrollPane1.setViewportView(jTableUsuarios);
+            model.addColumn("ID_Usuario");
+            model.addColumn("Nombre");
+            model.addColumn("Username");
+            model.addColumn("PassWord");
+            model.addColumn("Nivel");
+            model.addColumn("Estado");
+            while (rs.next()) {
+                Object[] ob = new Object[6];
+                for (int i = 0; i < ob.length; i++) {
+                    ob[i] = rs.getObject(i + 1);
+                }
+                model.addRow(ob);
+            }
+            cn.close();
+        } catch (SQLException e) {
+            System.err.println("Error al rellenar la tabla");
+            JOptionPane.showMessageDialog(null, "Error en la conexion DB con la Tabla");
+        }
+
+        jTableUsuarios.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int fila_point = jTableUsuarios.rowAtPoint(e.getPoint());
+                int columna_point = 2;
+                if (fila_point > -1) {
+                    actualizarU = (String) model.getValueAt(fila_point, columna_point);
+                    jFActualizarU go = new jFActualizarU();
+                    go.setVisible(true);
+                }
+            }
+        });
+    }
 }

@@ -1,4 +1,5 @@
 package UI.Recepcionista;
+//Importamos las clases y las utilidades que usaremos en la actulizacion del usuario
 
 import UI.Inicio.FromPrincipal;
 import java.sql.*;
@@ -29,6 +30,7 @@ import java.io.FileOutputStream;
  */
 public class jFRegistrarPaquete extends javax.swing.JFrame {
 
+//Atributos que declaramos globales para poder ser usados en los distintos metodos    
     String user;
     Connection cn = ConectorDB.conexion();
     DefaultTableModel model = new DefaultTableModel();
@@ -38,10 +40,11 @@ public class jFRegistrarPaquete extends javax.swing.JFrame {
     String localizacion = "";
     String estado_paquete = "";
     int prioridad_cmb;
-    int tiempo=0;
-    String ruta="";
+    int tiempo = 0;
+    String ruta = "";
+
     /**
-     * Creates new form jFRegistrarPaquete
+     * Constructor
      */
     public jFRegistrarPaquete() {
         initComponents();
@@ -51,7 +54,8 @@ public class jFRegistrarPaquete extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         user = FromPrincipal.user;
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        aggDestino();
+        aggDestino();                                                           //Llamamos al metodo que nos cargan los destinos disponibles
+//Creamos al inicio la tabla que cargara el paquete ya que se necesita que este antes de que se agreguen 
         tableLista = new JTable(model);
         jScrollPane1.setViewportView(tableLista);
         model.addColumn("ID Paquete");
@@ -178,11 +182,11 @@ public class jFRegistrarPaquete extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+//Este boton tiene el evento de obtener todos los datos de la tabla de los paquetes del cliente y llama al metodo que genera la factura
     private void btnGenerarFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarFacturaActionPerformed
         generateFac();
     }//GEN-LAST:event_btnGenerarFacturaActionPerformed
-
+//Este boton tiene el evento de aggpaquete el cual permite crear el paquete
     private void btnAgregarPaqueteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarPaqueteActionPerformed
         aggPaquete();
     }//GEN-LAST:event_btnAgregarPaqueteActionPerformed
@@ -205,6 +209,7 @@ public class jFRegistrarPaquete extends javax.swing.JFrame {
     private javax.swing.JTextField txtIDCliente;
     private javax.swing.JTextField txtPeso;
     // End of variables declaration//GEN-END:variables
+//Este metodo permite limpiar los campos que han sido llenados al crear un nuevo cliente    
     public void clear() {
         txtIDCliente.setEnabled(false);
         txtIDCliente.setBackground(Color.WHITE);
@@ -214,9 +219,10 @@ public class jFRegistrarPaquete extends javax.swing.JFrame {
         cmbPrioridad.setSelectedIndex(0);
         jDFecha.setDate(null);
     }
+//Este metodo agrega el Paquete a la Cola de la Bodega para despues ser procesado por el Operario
 
     public void aggPaquete() {
-        int validacion = 0,cantidad = 1;
+        int validacion = 0, cantidad = 1;
         boolean prioridad_boolean = true;
         String fecha = ((JTextField) jDFecha.getDateEditor().getUiComponent()).getText();
         nitCliente = txtIDCliente.getText().trim();
@@ -225,7 +231,7 @@ public class jFRegistrarPaquete extends javax.swing.JFrame {
         cmb_Destino = cmbDestino.getSelectedItem().toString();
         estado_paquete = "No entregado";
         localizacion = "Bodega";
-        
+
         if (nitCliente.equals("")) {
             txtIDCliente.setBackground(Color.red);
             validacion++;
@@ -252,7 +258,7 @@ public class jFRegistrarPaquete extends javax.swing.JFrame {
                 ps1.setFloat(8, precio);
                 ps1.setString(9, localizacion);
                 ps1.setInt(10, tiempo);
-                ps1.setString(11,ruta);
+                ps1.setString(11, ruta);
                 ps1.executeUpdate();
                 txtIDCliente.setBackground(Color.green);
                 txtPeso.setBackground(Color.green);
@@ -269,6 +275,7 @@ public class jFRegistrarPaquete extends javax.swing.JFrame {
 
         }
     }
+//Este metodo compara si el nit ingresado por el cliente existe y si no existe llama a la venta registrar cliente la cual permite la creacion de un nuevo cliente
 
     public void compareNIT() {
         try {
@@ -283,6 +290,7 @@ public class jFRegistrarPaquete extends javax.swing.JFrame {
             System.err.println("Error al crear cliente en paquete " + e);
         }
     }
+//Este metodo obtiene los destinos posibles de la ruta y los inserta en un ArrayList para luego ser agregado al ComboBox del destino
 
     public void aggDestino() {
         ArrayList<String> list = new ArrayList<String>();
@@ -300,6 +308,7 @@ public class jFRegistrarPaquete extends javax.swing.JFrame {
             System.err.println("Error en el array " + e);
         }
     }
+//Este metodo llena la tabla que servira como base para convertirla en pdf, "Crea como sera la factura".
 
     public void tabla(String fecha) {
         try {
@@ -323,6 +332,7 @@ public class jFRegistrarPaquete extends javax.swing.JFrame {
             System.err.println("Error al llenar la tabla " + e);
         }
     }
+//Este metodo calcula el precio y lo actualiza si es que ya fue procesado por algun operario
 
     public void calcPrecio(float peso) {
         float precioL = 0, precioD = 0, precioP = 0;
@@ -347,15 +357,15 @@ public class jFRegistrarPaquete extends javax.swing.JFrame {
         }
         precio = (precioL * peso) + precioD + precioP;
     }
+//Este metodo genera la factura de los paquetes que haya ingresado el cliente y los exporta como pdf a la direccion que se le asigna
 
     public void generateFac() {
         Document documento = new Document();
-        String fechaf = ((JTextField) jDFecha.getDateEditor().getUiComponent()).getText();
+        String fechaf = ((JTextField) jDFecha.getDateEditor().getUiComponent()).getText();              //Guardamos en una variable tipo String la fecha que ingreso    
         try {
-            String root = System.getProperty("user.home");
-            PdfWriter.getInstance(documento, new FileOutputStream(root +"/Desktop/IPC2_Proyect1/"+nitCliente +"_factura.pdf"));
+            String root = System.getProperty("user.home");                                              //Guardamos en una variable tipo String el usuario que usara el documento para guardarlo
+            PdfWriter.getInstance(documento, new FileOutputStream(root + "/Desktop/IPC2_Proyect1/" + nitCliente + "_factura.pdf"));             //Abrimos un canal de salida para documento con la direccion a la cual debe de guardarse
             documento.open();
-
             PdfPTable table = new PdfPTable(7);
             table.addCell("ID Paquete");
             table.addCell("NIT Cliente");
@@ -364,10 +374,8 @@ public class jFRegistrarPaquete extends javax.swing.JFrame {
             table.addCell("Fecha Ingreso");
             table.addCell("Prioridad");
             table.addCell("Precio");
-
             try {
-                PreparedStatement ps = cn.prepareStatement
-("SELECT id_paquete, nit_cliente, peso, destino, fecha_ingreso, prioridad, precio FROM Paquete WHERE nit_cliente='"+txtIDCliente.getText()+"'");
+                PreparedStatement ps = cn.prepareStatement("SELECT id_paquete, nit_cliente, peso, destino, fecha_ingreso, prioridad, precio FROM Paquete WHERE nit_cliente='" + txtIDCliente.getText() + "'");
                 ResultSet rs = ps.executeQuery();
                 if (rs.next()) {
                     do {
@@ -385,19 +393,20 @@ public class jFRegistrarPaquete extends javax.swing.JFrame {
             }
             documento.close();
             JOptionPane.showMessageDialog(null, "Factura creada con exito!");
-
         } catch (DocumentException | HeadlessException | FileNotFoundException e) {
         }
     }
-    public void obtenerRuta(){
-    try{
-        PreparedStatement ps3= cn.prepareStatement("SELECT nombre_ruta FROM Rutas WHERE destino ='"+cmb_Destino+"'");
-        ResultSet rs3 = ps3.executeQuery();
-        if(rs3.next()){
-        ruta=rs3.getString("nombre_ruta");
+//Este metodo guarda en una variable la seleccion de ComboBox de Destino    
+
+    public void obtenerRuta() {
+        try {
+            PreparedStatement ps3 = cn.prepareStatement("SELECT nombre_ruta FROM Rutas WHERE destino ='" + cmb_Destino + "'");
+            ResultSet rs3 = ps3.executeQuery();
+            if (rs3.next()) {
+                ruta = rs3.getString("nombre_ruta");
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al jalar la ruta " + e);
         }
-    }catch(SQLException e){
-        System.err.println("Error al jalar la ruta " +e);
-    }
     }
 }

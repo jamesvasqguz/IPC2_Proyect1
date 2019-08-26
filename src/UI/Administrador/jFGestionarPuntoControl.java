@@ -1,4 +1,5 @@
 package UI.Administrador;
+//Importamos las clases y las utilidades que usaremos en la actulizacion del usuario
 
 import UI.Administrador.jFActualizarPunto;
 import Class.ConectorDB;
@@ -19,6 +20,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class jFGestionarPuntoControl extends javax.swing.JFrame {
 
+//Atributos que declaramos globales para poder ser usados en los distintos metodos
     String user;
     public static String actualizarPunto = "";
     public static int idRuta;
@@ -37,7 +39,7 @@ public class jFGestionarPuntoControl extends javax.swing.JFrame {
         setTitle("Gestionar Punto de Control");
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        llenarPuntos();
+        llenarPuntos();                                                         //Llamamos al metodo que llena la tabla de los PC
     }
 
     /**
@@ -99,7 +101,7 @@ public class jFGestionarPuntoControl extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tablePunto;
     // End of variables declaration//GEN-END:variables
-
+//Este metodo llena la tabla con la imformacion de los Puntos Control
     public void llenarPuntos() {
         try {
             PreparedStatement ps = cn.prepareStatement(
@@ -126,7 +128,7 @@ public class jFGestionarPuntoControl extends javax.swing.JFrame {
             System.err.println("Error al rellenar la tabla");
             JOptionPane.showMessageDialog(null, "Error en la conexion DB con la Tabla");
         }
-
+//Este evento hace que al darle click envie al admin a actualizar los datos del PC
         tablePunto.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

@@ -1,4 +1,5 @@
 package UI.Administrador;
+
 import UI.Inicio.FromPrincipal;
 import java.sql.*;
 import Class.ConectorDB;
@@ -11,8 +12,9 @@ import javax.swing.WindowConstants;
  * @author jara
  */
 public class jFRegistrarUsuario extends javax.swing.JFrame {
-    
+//Atributos globales que usaremos en la construccion de metodos
     String user;
+    Connection cn = ConectorDB.conexion();
 
     /**
      * Creates new form jFRegistrarUsuario
@@ -25,7 +27,7 @@ public class jFRegistrarUsuario extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         user = FromPrincipal.user;
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        
+
     }
 
     /**
@@ -61,19 +63,30 @@ public class jFRegistrarUsuario extends javax.swing.JFrame {
 
         jLabel2.setText("Ingresar nombre del Usuario:");
         jPanel1.add(jLabel2);
-        jLabel2.setBounds(20, 70, 190, 15);
+        jLabel2.setBounds(20, 70, 250, 15);
 
         jLabel4.setText("Ingresar UserName:");
         jPanel1.add(jLabel4);
-        jLabel4.setBounds(20, 170, 150, 15);
+        jLabel4.setBounds(20, 170, 210, 15);
 
         jLabel5.setText("Ingresar Password:");
         jPanel1.add(jLabel5);
-        jLabel5.setBounds(20, 270, 130, 15);
+        jLabel5.setBounds(20, 270, 240, 15);
 
         jLabel6.setText("Seleccionar Nivel de Usuario");
         jPanel1.add(jLabel6);
-        jLabel6.setBounds(360, 70, 200, 15);
+        jLabel6.setBounds(390, 70, 200, 15);
+
+        jTFNueUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTFNueUsuarioActionPerformed(evt);
+            }
+        });
+        jTFNueUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTFNueUsuarioKeyTyped(evt);
+            }
+        });
         jPanel1.add(jTFNueUsuario);
         jTFNueUsuario.setBounds(20, 90, 280, 32);
         jPanel1.add(jTFNueUserName);
@@ -83,7 +96,7 @@ public class jFRegistrarUsuario extends javax.swing.JFrame {
 
         cmb_niveles.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administrador", "Operador", "Recepcionista" }));
         jPanel1.add(cmb_niveles);
-        cmb_niveles.setBounds(360, 90, 139, 32);
+        cmb_niveles.setBounds(390, 90, 139, 32);
 
         btnRegistrarNueUsuario.setText("Registrar");
         btnRegistrarNueUsuario.addActionListener(new java.awt.event.ActionListener() {
@@ -92,91 +105,28 @@ public class jFRegistrarUsuario extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnRegistrarNueUsuario);
-        btnRegistrarNueUsuario.setBounds(410, 310, 110, 60);
+        btnRegistrarNueUsuario.setBounds(420, 260, 110, 60);
 
         getContentPane().add(jPanel1);
-        jPanel1.setBounds(0, 0, 650, 510);
+        jPanel1.setBounds(0, 0, 650, 500);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+//Este boton tiene el evento de Crear un nuevo Usuario
     private void btnRegistrarNueUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarNueUsuarioActionPerformed
-        int permisos_cmb, validacion = 0;
-        String nombre, username, pass, idNU, permisos_string = "";
-        
-        nombre = jTFNueUsuario.getText().trim();
-        username = jTFNueUserName.getText().trim();
-        pass = jTFNuePass.getText().trim();
-        permisos_cmb = cmb_niveles.getSelectedIndex() + 1;
-        
-        if (nombre.equals("")) {
-            jTFNueUsuario.setBackground(Color.red);
-            validacion++;
-        }
-        
-        if (username.equals("")) {
-            jTFNueUserName.setBackground(Color.red);
-            validacion++;
-        }
-        
-        if (pass.equals("")) {
-            jTFNuePass.setBackground(Color.red);
-            validacion++;
-        }
-        
-        if (permisos_cmb == 1) {
-            permisos_string = "Administrador";
-        } else if (permisos_cmb == 2) {
-            permisos_string = "Operador";
-        } else if (permisos_cmb == 3) {
-            permisos_string = "Recepcionista";
-        }
-        
-        try {
-            Connection cn = ConectorDB.conexion();
-            PreparedStatement ps = cn.prepareStatement(
-                    "SELECT username FROM Usuario WHERE username='"
-                    + username + "'");
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                jTFNueUserName.setBackground(Color.red);
-                JOptionPane.showMessageDialog(null, "Nombre de usuario ya existe! \n Prueba con otro");
-                cn.close();
-            } else {
-                cn.close();
-                if (validacion == 0) {
-                    try {
-                        Connection cn1 = ConectorDB.conexion();
-                        PreparedStatement ps1 = cn1.prepareStatement("INSERT INTO Usuario VALUES(?,?,?,?,?,?)");
-                        ps1.setInt(1,0);
-                        ps1.setString(2, nombre);
-                        ps1.setString(3, username);
-                        ps1.setString(4, pass);
-                        ps1.setString(5, permisos_string);
-                        ps1.setString(6, "Activo");
-                        ps1.executeUpdate();
-                        cn1.close();
-                        clear();
-                        jTFNuePass.setBackground(Color.green);
-                        jTFNueUserName.setBackground(Color.green);
-                        jTFNueUsuario.setBackground(Color.green);
-                        JOptionPane.showMessageDialog(null, "Usuario creado exitosamente!");
-                        this.dispose();
-                    } catch (SQLException e) {
-                        System.err.println("Erro al registrar nuevo usuario." + e);
-                        JOptionPane.showMessageDialog(null, "Error al registrar usuario!");
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(null, "Campos incompletos!! \n Ingrese todos los datos.");
-                    
-                }
-                
-            }
-        } catch (SQLException e) {
-            System.err.println("Error al validar usuario" + e);
-            JOptionPane.showMessageDialog(null, "Error al comparar usuario!");
-        }
+        crearUsuario();
     }//GEN-LAST:event_btnRegistrarNueUsuarioActionPerformed
+//Este boton tiene el evento de validar que se escribe en los campos
+    private void jTFNueUsuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTFNueUsuarioKeyTyped
+        char c = evt.getKeyChar();
+        if (c < 'a' || c > 'z') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_jTFNueUsuarioKeyTyped
+
+    private void jTFNueUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTFNueUsuarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTFNueUsuarioActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegistrarNueUsuario;
@@ -191,7 +141,82 @@ public class jFRegistrarUsuario extends javax.swing.JFrame {
     private javax.swing.JTextField jTFNueUserName;
     private javax.swing.JTextField jTFNueUsuario;
     // End of variables declaration//GEN-END:variables
+//Este metodo tiene las validaciones, las varibles y el codigo para crear un nuevo Usuario
+    public void crearUsuario() {
+        int permisos_cmb, validacion = 0;
+        String nombre, username, pass, idNU, permisos_string = "";
 
+        nombre = jTFNueUsuario.getText().trim();
+        username = jTFNueUserName.getText().trim();
+        pass = jTFNuePass.getText().trim();
+        permisos_cmb = cmb_niveles.getSelectedIndex() + 1;
+
+        if (nombre.equals("")) {
+            jTFNueUsuario.setBackground(Color.red);
+            validacion++;
+        }
+
+        if (username.equals("")) {
+            jTFNueUserName.setBackground(Color.red);
+            validacion++;
+        }
+
+        if (pass.equals("")) {
+            jTFNuePass.setBackground(Color.red);
+            validacion++;
+        }
+
+        if (permisos_cmb == 1) {
+            permisos_string = "Administrador";
+        } else if (permisos_cmb == 2) {
+            permisos_string = "Operador";
+        } else if (permisos_cmb == 3) {
+            permisos_string = "Recepcionista";
+        }
+
+        try {
+            PreparedStatement ps = cn.prepareStatement(
+                    "SELECT username FROM Usuario WHERE username='"
+                    + username + "'");
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                jTFNueUserName.setBackground(Color.red);
+                JOptionPane.showMessageDialog(null, "Nombre de usuario ya existe! \n Prueba con otro");
+                cn.close();
+            } else {
+                cn.close();
+                if (validacion == 0) {
+                    try {
+                        PreparedStatement ps1 = cn.prepareStatement("INSERT INTO Usuario VALUES(?,?,?,?,?,?)");
+                        ps1.setInt(1, 0);
+                        ps1.setString(2, nombre);
+                        ps1.setString(3, username);
+                        ps1.setString(4, pass);
+                        ps1.setString(5, permisos_string);
+                        ps1.setString(6, "Activo");
+                        ps1.executeUpdate();
+                        cn.close();
+                        clear();
+                        jTFNuePass.setBackground(Color.green);
+                        jTFNueUserName.setBackground(Color.green);
+                        jTFNueUsuario.setBackground(Color.green);
+                        JOptionPane.showMessageDialog(null, "Usuario creado exitosamente!");
+                        this.dispose();
+                    } catch (SQLException e) {
+                        System.err.println("Erro al registrar nuevo usuario." + e);
+                        JOptionPane.showMessageDialog(null, "Error al registrar usuario!");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Campos incompletos!! \n Ingrese todos los datos.");
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al validar usuario" + e);
+            JOptionPane.showMessageDialog(null, "Error al comparar usuario!");
+        }
+    }
+
+//Este metodo nos permite limpiar los campos para la creacion de un nuevo usuario
     public void clear() {
         jTFNuePass.setText("");
         jTFNueUserName.setText("");

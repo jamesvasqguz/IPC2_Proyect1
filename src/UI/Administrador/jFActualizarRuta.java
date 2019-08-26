@@ -1,5 +1,5 @@
 package UI.Administrador;
-
+//Importamos las clases y las utilidades que usaremos en la actulizacion del usuario
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,7 +13,7 @@ import java.sql.Connection;
  * @author jara
  */
 public class jFActualizarRuta extends javax.swing.JFrame {
-
+//Atributos que declaramos globales para poder ser usados en los distintos metodos   
     Connection cn = ConectorDB.conexion();
     int cmb_estado;
     String cmb_Estado;
@@ -29,8 +29,7 @@ public class jFActualizarRuta extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         jLabel1.setText("Actualizar la Ruta: " + jFGestionarRuta.nombreRuta);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-
-        infoRuta();
+        infoRuta();                                                             //Llamamos al metodo que llena los campos con los datos de la ruta
     }
 
     /**
@@ -65,19 +64,19 @@ public class jFActualizarRuta extends javax.swing.JFrame {
 
         jLabel2.setText("Nombre de la Ruta:");
         jPanel1.add(jLabel2);
-        jLabel2.setBounds(50, 140, 140, 15);
+        jLabel2.setBounds(50, 100, 140, 15);
 
         jLabel3.setText("Estado de la Ruta:");
         jPanel1.add(jLabel3);
-        jLabel3.setBounds(50, 330, 140, 15);
+        jLabel3.setBounds(50, 310, 140, 15);
 
         jLabel4.setText("Destino de la Ruta:");
         jPanel1.add(jLabel4);
-        jLabel4.setBounds(50, 240, 140, 15);
+        jLabel4.setBounds(50, 200, 140, 15);
         jPanel1.add(txtNombreR);
-        txtNombreR.setBounds(50, 160, 280, 32);
+        txtNombreR.setBounds(50, 120, 280, 32);
         jPanel1.add(txtDestinoR);
-        txtDestinoR.setBounds(50, 260, 280, 32);
+        txtDestinoR.setBounds(50, 220, 280, 32);
 
         cmbEstadoR.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activa", "Inactiva" }));
         cmbEstadoR.addActionListener(new java.awt.event.ActionListener() {
@@ -86,15 +85,15 @@ public class jFActualizarRuta extends javax.swing.JFrame {
             }
         });
         jPanel1.add(cmbEstadoR);
-        cmbEstadoR.setBounds(50, 350, 160, 32);
+        cmbEstadoR.setBounds(50, 330, 160, 32);
 
         jButton1.setText("Actualizar Ruta");
         jPanel1.add(jButton1);
-        jButton1.setBounds(360, 330, 160, 80);
+        jButton1.setBounds(410, 290, 160, 80);
 
         jLabel5.setText("ID de la Ruta");
         jPanel1.add(jLabel5);
-        jLabel5.setBounds(420, 140, 110, 15);
+        jLabel5.setBounds(420, 100, 110, 15);
 
         txtIDRuta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -102,10 +101,10 @@ public class jFActualizarRuta extends javax.swing.JFrame {
             }
         });
         jPanel1.add(txtIDRuta);
-        txtIDRuta.setBounds(420, 160, 90, 32);
+        txtIDRuta.setBounds(420, 120, 90, 32);
 
         getContentPane().add(jPanel1);
-        jPanel1.setBounds(0, 0, 650, 500);
+        jPanel1.setBounds(0, 0, 740, 500);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -131,7 +130,7 @@ public class jFActualizarRuta extends javax.swing.JFrame {
     private javax.swing.JTextField txtIDRuta;
     private javax.swing.JTextField txtNombreR;
     // End of variables declaration//GEN-END:variables
-
+//Este metodo permite llenas los campos con los datos de la ruta
     public void infoRuta() {
         try {
             PreparedStatement ps = cn.prepareStatement(
@@ -147,8 +146,11 @@ public class jFActualizarRuta extends javax.swing.JFrame {
             System.err.println("Error al cargar ruta" + e);
             JOptionPane.showMessageDialog(null, "Error al cargar ruta!");
         }
+        txtNombreR.setEnabled(false);
+        txtIDRuta.setEnabled(false);
+        txtDestinoR.setEnabled(false);
     }
-
+//Este metodo guarda en una variable lo que el administrador selecciono en el comboBox de estado de la ruta
     public void combo() {
         cmb_estado = cmbEstadoR.getSelectedIndex() + 1;
         if (cmb_estado == 1) {

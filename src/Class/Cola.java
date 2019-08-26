@@ -26,22 +26,6 @@ public class Cola {
         this.capacidad = capacidad;
         Paquete[] p = new Paquete[capacidad];
     }
-
-    public boolean vacia() {
-        if (top == 0 && bottom == 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean llena() {
-        if (top == capacidad) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 //Este metodo llena la cola del primer PC creado para la Ruta mandandole como parametro nombre del punto y su siguiente parada
 
     public void llenar(String call, String destinoF) {

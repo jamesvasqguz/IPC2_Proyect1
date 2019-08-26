@@ -1,4 +1,5 @@
 package UI.Administrador;
+//Importamos las clases y las utilidades que usaremos en la actulizacion de la ruta
 
 import UI.Administrador.jFActualizarRuta;
 import java.awt.event.MouseAdapter;
@@ -18,15 +19,17 @@ import javax.swing.table.DefaultTableModel;
  * @author jara
  */
 public class jFGestionarRuta extends javax.swing.JFrame {
+//Atributos que declaramos globales para poder ser usados en los distintos metodos   
 
     Connection cn = ConectorDB.conexion();
     DefaultTableModel model = new DefaultTableModel();
     public static int actualizarRuta;
     public static String nombreRuta;
     public static String destino;
-            /**
-             * Creates new form jFGestionarRuta
-             */
+
+    /**
+     * Creates new form jFGestionarRuta
+     */
 
     public jFGestionarRuta() {
         initComponents();
@@ -35,7 +38,8 @@ public class jFGestionarRuta extends javax.swing.JFrame {
         setTitle("Gestionar Rutas");
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        llenarRutas();
+        llenarRutas();                                                          //Llamamos al metodo que llenara la tabla    
+
     }
 
     /**
@@ -90,7 +94,8 @@ public class jFGestionarRuta extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tableRutas;
     // End of variables declaration//GEN-END:variables
-  public void llenarRutas() {
+//Este metodo hace que la tabla se llene de las Rutas que existen con sus datos
+    public void llenarRutas() {
         try {
             PreparedStatement ps = cn.prepareStatement(
                     "SELECT id_rutas, nombre_ruta, estado_ruta, destino, precio_libra, precio_destino FROM Rutas");

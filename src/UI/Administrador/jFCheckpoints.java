@@ -17,6 +17,7 @@ import javax.swing.WindowConstants;
  */
 public class jFCheckpoints extends javax.swing.JFrame {
 //Definimos atributos globales para luego ser usados en diferentes metodos
+
     String user;
     Connection cn = ConectorDB.conexion();
     int cmb_estado = 0, id, numOpe, size = 0, costo;
@@ -34,8 +35,8 @@ public class jFCheckpoints extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         user = FromPrincipal.user;
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        createCheckpoint();
-        rutas();
+        createCheckpoint();                                                     //Llamamos al metodo carga las operarios en ComboBox
+        rutas();                                                                //Llamamos al metodo carga las rutas en ComboBox
     }
 
     /**
@@ -75,21 +76,21 @@ public class jFCheckpoints extends javax.swing.JFrame {
 
         jLabel2.setText("Seleccione Ruta a la cual pertenece:");
         jPanel1.add(jLabel2);
-        jLabel2.setBounds(30, 70, 240, 15);
+        jLabel2.setBounds(30, 70, 290, 15);
 
         jPanel1.add(cmbRuta);
         cmbRuta.setBounds(30, 90, 220, 32);
 
         jLabel3.setText("Seleccione Operador");
         jPanel1.add(jLabel3);
-        jLabel3.setBounds(30, 160, 140, 15);
+        jLabel3.setBounds(30, 160, 230, 15);
 
         jPanel1.add(cmbOperador);
         cmbOperador.setBounds(30, 180, 220, 32);
 
         jLabel4.setText("Estado del Punto de Control");
         jPanel1.add(jLabel4);
-        jLabel4.setBounds(350, 70, 180, 15);
+        jLabel4.setBounds(350, 70, 220, 15);
 
         cmbEstadoControl.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activo", "Inactivo" }));
         jPanel1.add(cmbEstadoControl);
@@ -113,17 +114,29 @@ public class jFCheckpoints extends javax.swing.JFrame {
         jLabel6.setText("Nombre del Punto Control");
         jPanel1.add(jLabel6);
         jLabel6.setBounds(220, 290, 190, 15);
+
+        txtNombrePC.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombrePCKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtNombrePC);
         txtNombrePC.setBounds(120, 310, 380, 32);
 
         jLabel7.setText("Capacidad del Punto Control:");
         jPanel1.add(jLabel7);
         jLabel7.setBounds(210, 230, 230, 15);
+
+        txtSize.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtSizeKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtSize);
         txtSize.setBounds(250, 250, 100, 32);
 
         getContentPane().add(jPanel1);
-        jPanel1.setBounds(0, 0, 660, 490);
+        jPanel1.setBounds(0, 0, 780, 490);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -134,6 +147,20 @@ public class jFCheckpoints extends javax.swing.JFrame {
         createPC();
         createColaPC();
     }//GEN-LAST:event_btnCrearPCActionPerformed
+//Este metodo permite que no puedan ser ingresados numeros en la cantidad de paquete que almacena el PC
+    private void txtSizeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSizeKeyTyped
+        char c = evt.getKeyChar();
+        if (c < '0' || c > '9') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtSizeKeyTyped
+
+    private void txtNombrePCKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombrePCKeyTyped
+        char c = evt.getKeyChar();
+        if (c < 'a' || c > 'z') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtNombrePCKeyTyped
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCrearPC;

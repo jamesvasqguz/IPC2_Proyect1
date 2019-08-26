@@ -1,4 +1,6 @@
 package UI.Administrador;
+//Importamos las clases y las utilidades que usaremos en la actulizacion del usuario
+
 import UI.Inicio.FromPrincipal;
 import Class.ConectorDB;
 import java.awt.Color;
@@ -9,15 +11,19 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
+
 /**
  *
  * @author jara
  */
 public class jFActualizarPunto extends javax.swing.JFrame {
-    String user="",punto="", cmb_Estado, nombreNuevo;
-    int cmb_estado,opeNuevo,idUsuarioNue, capacidad;
+//Atributos que declaramos globales para poder ser usados en los distintos metodos        
+
+    String user = "", punto = "", cmb_Estado, nombreNuevo;
+    int cmb_estado, opeNuevo, idUsuarioNue, capacidad;
     float tarifaNu;
     Connection cn = ConectorDB.conexion();
+
     /**
      * Creates new form jFActualizarPunto
      */
@@ -30,9 +36,9 @@ public class jFActualizarPunto extends javax.swing.JFrame {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         user = FromPrincipal.user;
         punto = jFGestionarPuntoControl.actualizarPunto;
-        jLabel1.setText("Informacion del Punto de Control: " +punto);
-        createCheckpoint();
-        llenarInfo();
+        jLabel1.setText("Informacion del Punto de Control: " + punto);
+        createCheckpoint();                                                     //Llamamos al metodo que ingresa los operadores en el ComboBox
+        llenarInfo();                                                           //Llamamos al metodo que nos llena los campos con los datos del PC
     }
 
     /**
@@ -109,6 +115,12 @@ public class jFActualizarPunto extends javax.swing.JFrame {
         cmbEstado.setBounds(360, 90, 102, 32);
         jPanel1.add(txtPrecio);
         txtPrecio.setBounds(360, 180, 180, 32);
+
+        txtNombrePunto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombrePuntoKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtNombrePunto);
         txtNombrePunto.setBounds(140, 320, 340, 32);
 
@@ -127,6 +139,12 @@ public class jFActualizarPunto extends javax.swing.JFrame {
         jLabel7.setText("Capacidad del Punto:");
         jPanel1.add(jLabel7);
         jLabel7.setBounds(240, 230, 170, 15);
+
+        txtCant.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCantKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtCant);
         txtCant.setBounds(250, 250, 110, 32);
 
@@ -135,49 +153,37 @@ public class jFActualizarPunto extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+//Este metodo obtiene las modificaciones del PC y las actualiza en la DB
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-        int validacion=0;
-        combo();
-        tarifaNu = Float.parseFloat(txtPrecio.getText().trim());
-        nombreNuevo = txtNombrePunto.getText().trim();
-        capacidad = Integer.parseInt(txtCant.getText().trim());
-        idUsuario();
-        if(nombreNuevo.equals("")){
-        txtNombrePunto.setBackground(Color.red);
-        validacion++;
-        }
-            try {
-                PreparedStatement ps2 = cn.prepareStatement(
-                        "UPDATE PuntoControl SET id_usuario=?, estado_punto=?, nombre_punto=?,tarifa=?, size=? " 
-                                + "WHERE id_punto= '" +jFGestionarPuntoControl.idPunto+ "'");
-                ps2.setInt(1, idUsuarioNue);
-                ps2.setString(2, cmb_Estado);
-                ps2.setString(3, nombreNuevo);
-                ps2.setFloat(4,tarifaNu);
-                ps2.setInt(5,capacidad);
-                ps2.executeUpdate();
-                cn.close();
-                JOptionPane.showMessageDialog(null, "Punto de Control actualizado correctamente!");
-                
-            } catch (SQLException e) {
-            System.err.println("Error al actualizar" + e);
-            JOptionPane.showMessageDialog(null, "Error al actualizar Punto Control!");
-            }   
+        combo();                                                                //Llamamos al metodo que guarda la eleccion del 
+        actualizarPC();                                                         //Llamamos al metodo que actualiza los datos del PC
     }//GEN-LAST:event_btnActualizarActionPerformed
-
+//Este metodo permite eliminar el PC
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         try {
             PreparedStatement ps1 = cn.prepareStatement(
-                    "DELETE FROM PuntoControl WHERE id_punto='"+jFGestionarPuntoControl.idPunto+"'");
+                    "DELETE FROM PuntoControl WHERE id_punto='" + jFGestionarPuntoControl.idPunto + "'");
             ps1.executeUpdate();
             JOptionPane.showMessageDialog(null, "Punto de Control Eliminado con exito!");
-            
-            
+
         } catch (SQLException e) {
-            System.err.println("Error al borrar Punto de control " +e);
+            System.err.println("Error al borrar Punto de control " + e);
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void txtCantKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantKeyTyped
+        char c = evt.getKeyChar();
+        if (c < '0' || c > '9') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtCantKeyTyped
+
+    private void txtNombrePuntoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombrePuntoKeyTyped
+     char c = evt.getKeyChar();
+        if (c < 'a' || c > 'z') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtNombrePuntoKeyTyped
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
@@ -197,36 +203,38 @@ public class jFActualizarPunto extends javax.swing.JFrame {
     private javax.swing.JTextField txtNombreRuta;
     private javax.swing.JTextField txtPrecio;
     // End of variables declaration//GEN-END:variables
-
-    public void llenarInfo(){
-    try {
+//Este metodo llena los campos con los datos del PC 
+    public void llenarInfo() {
+        try {
             PreparedStatement ps = cn.prepareStatement(
-            "SELECT * FROM PuntoControl WHERE nombre_punto ='" +punto+"'");
-            ResultSet rs= ps.executeQuery();
-            if(rs.next()){
-            txtPrecio.setText(rs.getString("tarifa"));
-            txtNombrePunto.setText(rs.getString("nombre_punto"));
-            txtCant.setText(rs.getString("size"));
-            cmbEstado.setSelectedItem(rs.getString("estado_punto"));
+                    "SELECT * FROM PuntoControl WHERE nombre_punto ='" + punto + "'");
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                txtPrecio.setText(rs.getString("tarifa"));
+                txtNombrePunto.setText(rs.getString("nombre_punto"));
+                txtCant.setText(rs.getString("size"));
+                cmbEstado.setSelectedItem(rs.getString("estado_punto"));
             }
-            
+
             PreparedStatement ps1 = cn.prepareStatement(
-            "SELECT * FROM Rutas WHERE id_rutas ='"+jFGestionarPuntoControl.idRuta+"'");
+                    "SELECT * FROM Rutas WHERE id_rutas ='" + jFGestionarPuntoControl.idRuta + "'");
             ResultSet rs1 = ps1.executeQuery();
-            if(rs1.next()){
-            txtNombreRuta.setText(rs1.getString("nombre_ruta"));
+            if (rs1.next()) {
+                txtNombreRuta.setText(rs1.getString("nombre_ruta"));
             }
             PreparedStatement ps2 = cn.prepareStatement(
-            "SELECT * FROM Usuario WHERE id_usuario ='"+jFGestionarPuntoControl.idUsuario+"'");
+                    "SELECT * FROM Usuario WHERE id_usuario ='" + jFGestionarPuntoControl.idUsuario + "'");
             ResultSet rs2 = ps2.executeQuery();
-            if(rs2.next()){
-            cmbNombreOpe.setSelectedItem(rs2.getString("nombre_usuario"));
+            if (rs2.next()) {
+                cmbNombreOpe.setSelectedItem(rs2.getString("nombre_usuario"));
             }
         } catch (SQLException e) {
-        System.err.println("Error al cargar usuario" + e);
-        JOptionPane.showMessageDialog(null, "Error al cargar usuario!");
+            System.err.println("Error al cargar usuario" + e);
+            JOptionPane.showMessageDialog(null, "Error al cargar usuario!");
         }
     }
+//En este metodo agregamos el ArrayList de los Operarios como items del ComboBox
+
     public void createCheckpoint() {
         try {
             operarios();
@@ -238,6 +246,7 @@ public class jFActualizarPunto extends javax.swing.JFrame {
         } catch (Exception e) {
         }
     }
+//En este metodo guardamos en un ArrayList los operadores disponibles que pueden ser asiganos al PC
 
     public ArrayList<String> operarios() {
         ArrayList<String> list = new ArrayList<String>();
@@ -255,6 +264,8 @@ public class jFActualizarPunto extends javax.swing.JFrame {
         }
         return list;
     }
+//En este metodo guardamos en una variable de tipo String en base a la seleccion de ComboBoc de Estado
+
     public void combo() {
         cmb_estado = cmbEstado.getSelectedIndex() + 1;
         if (cmb_estado == 1) {
@@ -263,17 +274,47 @@ public class jFActualizarPunto extends javax.swing.JFrame {
             cmb_Estado = "Inactivo";
         }
     }
-    public void idUsuario(){
-        
+//En este metodo guardamos la variable idUsuariola seleccion del Admin en ComboBox de de los operadores
+
+    public void idUsuario() {
         try {
-            PreparedStatement ps5 = cn.prepareStatement("SELECT * FROM Usuario WHERE nombre_usuario ='"+ cmbNombreOpe.getSelectedItem().toString() +"'");
+            PreparedStatement ps5 = cn.prepareStatement("SELECT * FROM Usuario WHERE nombre_usuario ='" + cmbNombreOpe.getSelectedItem().toString() + "'");
             ResultSet rs = ps5.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 idUsuarioNue = rs.getInt("id_usuario");
             }
         } catch (SQLException e) {
-            System.err.println("Error al insertar el ID del Usuario "+e);
+            System.err.println("Error al insertar el ID del Usuario " + e);
+        }
+    }
+
+    //Este metodo obtiene las modificaciones del PC y las actualiza en la DB
+    public void actualizarPC() {
+        int validacion = 0;
+        tarifaNu = Float.parseFloat(txtPrecio.getText().trim());
+        nombreNuevo = txtNombrePunto.getText().trim();
+        capacidad = Integer.parseInt(txtCant.getText().trim());
+        idUsuario();
+        if (nombreNuevo.equals("")) {
+            txtNombrePunto.setBackground(Color.red);
+            validacion++;
+        }
+        try {
+            PreparedStatement ps2 = cn.prepareStatement(
+                    "UPDATE PuntoControl SET id_usuario=?, estado_punto=?, nombre_punto=?,tarifa=?, size=? "
+                    + "WHERE id_punto= '" + jFGestionarPuntoControl.idPunto + "'");
+            ps2.setInt(1, idUsuarioNue);
+            ps2.setString(2, cmb_Estado);
+            ps2.setString(3, nombreNuevo);
+            ps2.setFloat(4, tarifaNu);
+            ps2.setInt(5, capacidad);
+            ps2.executeUpdate();
+            cn.close();
+            JOptionPane.showMessageDialog(null, "Punto de Control actualizado correctamente!");
+
+        } catch (SQLException e) {
+            System.err.println("Error al actualizar" + e);
+            JOptionPane.showMessageDialog(null, "Error al actualizar Punto Control!");
         }
     }
 }
-

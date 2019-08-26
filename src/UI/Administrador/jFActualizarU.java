@@ -1,4 +1,6 @@
 package UI.Administrador;
+//Importamos las clases y las utilidades que usaremos en la actulizacion del usuario
+
 import UI.Inicio.FromPrincipal;
 import javax.swing.WindowConstants;
 import java.sql.*;
@@ -11,13 +13,15 @@ import javax.swing.JOptionPane;
  * @author jara
  */
 public class jFActualizarU extends javax.swing.JFrame {
-    String user="";
-    String user_update="";
+
+//Atributos que declaramos globales para poder ser usados en los distintos metodos    
+    String user = "";
+    String user_update = "";
     int ID;
-    
-    
+    Connection cn = ConectorDB.conexion();
+
     /**
-     * Creates new form jFGestionarOpe
+     * Constructor
      */
     public jFActualizarU() {
         initComponents();
@@ -26,32 +30,12 @@ public class jFActualizarU extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        
+
         user = FromPrincipal.user;
         user_update = jFGestionarUsuario.actualizarU;
-        jLabel1.setText("Imformacion del usuario: " +user_update);
-        
-        try {
-            Connection cn = ConectorDB.conexion();
-            PreparedStatement ps = cn.prepareStatement(
-            "SELECT * FROM Usuario WHERE username= '" +user_update+"'");
-            ResultSet rs= ps.executeQuery();
-            if(rs.next()){
-            ID = rs.getInt("id_usuario");
-            txtActualizarID.setText(rs.getString("id_usuario"));
-            txtActualizarNom.setText(rs.getString("nombre_usuario"));
-            txtActualizarUser.setText(rs.getString("username")); 
-            txtActualizarPass.setText(rs.getString("password"));
-            cmbActualizarNi.setSelectedItem(rs.getString("tipo_nivel"));
-            cmbActualizarE.setSelectedItem(rs.getString("estado"));
-            
-            }
-            cn.close();
-        } catch (SQLException e) {
-        System.err.println("Error al cargar usuario" + e);
-        JOptionPane.showMessageDialog(null, "Error al cargar usuario!");
-        }
-        
+        jLabel1.setText("Imformacion del usuario: " + user_update);
+        txtActualizarID.setEnabled(false);
+        agregarDatosUsuario();                                                  //Llamamos al metodo que nos llena los campos con los datos del usuario
     }
 
     /**
@@ -91,19 +75,19 @@ public class jFActualizarU extends javax.swing.JFrame {
 
         lblID.setText("ID Usuario");
         jPanel1.add(lblID);
-        lblID.setBounds(30, 90, 90, 15);
+        lblID.setBounds(30, 90, 160, 15);
 
         lblNombre.setText("Nombre");
         jPanel1.add(lblNombre);
-        lblNombre.setBounds(30, 180, 80, 15);
+        lblNombre.setBounds(30, 180, 210, 15);
 
         lblUsername.setText("Username");
         jPanel1.add(lblUsername);
-        lblUsername.setBounds(30, 270, 61, 15);
+        lblUsername.setBounds(30, 270, 160, 15);
 
         lblPassword.setText("Password");
         jPanel1.add(lblPassword);
-        lblPassword.setBounds(30, 360, 110, 15);
+        lblPassword.setBounds(30, 360, 190, 15);
 
         lblNivel.setText("Nivel del Usuario");
         jPanel1.add(lblNivel);
@@ -131,12 +115,22 @@ public class jFActualizarU extends javax.swing.JFrame {
                 txtActualizarIDActionPerformed(evt);
             }
         });
+        txtActualizarID.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtActualizarIDKeyTyped(evt);
+            }
+        });
         jPanel1.add(txtActualizarID);
         txtActualizarID.setBounds(30, 110, 290, 32);
 
         txtActualizarNom.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtActualizarNomActionPerformed(evt);
+            }
+        });
+        txtActualizarNom.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtActualizarNomKeyTyped(evt);
             }
         });
         jPanel1.add(txtActualizarNom);
@@ -173,77 +167,24 @@ public class jFActualizarU extends javax.swing.JFrame {
     private void txtActualizarNomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtActualizarNomActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtActualizarNomActionPerformed
-
+//Este boton tiene el evento de actualizar los nuevos datos del usuario
     private void btnActualizarUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarUActionPerformed
-        int permisos_cmb, estatus_cmb, validacion=0;
-        String nombre, username, pass, permisos_string="", estado_string="";
-        
-        nombre = txtActualizarNom.getText().trim();
-        username = txtActualizarUser.getText().trim();
-        pass = txtActualizarPass.getText().trim();
-        permisos_cmb= cmbActualizarNi.getSelectedIndex() +1;
-        estatus_cmb= cmbActualizarE.getSelectedIndex()+1;
-        
-        if(nombre.equals("")){
-        txtActualizarNom.setBackground(Color.red);
-        validacion++;
-        }
-        if(username.equals("")){
-        txtActualizarUser.setBackground(Color.red);
-        validacion++;
-        }
-        if(pass.equals("")){
-        txtActualizarPass.setBackground(Color.red);
-        validacion++;
-        }
-        if(validacion==0){
-            if(permisos_cmb==1){
-            permisos_string= "Administrador";
-            }else if(permisos_cmb==2){
-            permisos_string= "Operador";
-            }else if(permisos_cmb==3){
-            permisos_string= "Recepcionista";
-            }
-            
-            if(estatus_cmb==1){
-                estado_string = "Activo";
-            }else if(estatus_cmb==2){
-                estado_string = "Inactivo";
-            }
-            try {
-                Connection cn = ConectorDB.conexion();
-                PreparedStatement ps = cn.prepareStatement(
-                        "SELECT username FROM Usuario WHERE username='" +username+"'and not id_usuario = '" + ID + "'");
-                ResultSet rs = ps.executeQuery();
-                if (rs.next()) {
-                    txtActualizarUser.setBackground(Color.red);
-                    JOptionPane.showMessageDialog(null, "Nombre de usuario ya existente");                   
-                    cn.close();
-                } else {
-                Connection cn1 = ConectorDB.conexion();
-                PreparedStatement ps1 = cn1.prepareStatement(
-                        "UPDATE Usuario SET nombre_usuario=?, username=?, password=?, tipo_nivel=?, estado=? " 
-                                + "WHERE id_usuario= '" + ID + "'");
-                ps1.setString(1, nombre);
-                ps1.setString(2, username);
-                ps1.setString(3, pass);
-                ps1.setString(4, permisos_string);
-                ps1.setString(5, estado_string);
-                ps1.executeUpdate();
-                cn1.close();
-                JOptionPane.showMessageDialog(null, "Usuario actualizado correctamente!");
-                }
-            } catch (SQLException e) {
-            System.err.println("Error al actualizar" + e);
-            JOptionPane.showMessageDialog(null, "Error al actualizar usuario!");
-            }
- 
-        }else{
-            JOptionPane.showMessageDialog(null,"Debe de rellenar todos lo campos de informacion!");
-        }
-        
-        
+        actualizarUsuario();
     }//GEN-LAST:event_btnActualizarUActionPerformed
+//Este evento permite solo ingresar numeros en el ID del usuario
+    private void txtActualizarIDKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtActualizarIDKeyTyped
+        char c = evt.getKeyChar();
+        if (c < '0' || c > '9') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtActualizarIDKeyTyped
+
+    private void txtActualizarNomKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtActualizarNomKeyTyped
+       char c = evt.getKeyChar();
+        if (c < 'a' || c > 'z') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtActualizarNomKeyTyped
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizarU;
@@ -262,4 +203,92 @@ public class jFActualizarU extends javax.swing.JFrame {
     private javax.swing.JTextField txtActualizarPass;
     private javax.swing.JTextField txtActualizarUser;
     // End of variables declaration//GEN-END:variables
+//Este metodo llenas automaticamente todos los Datos del usuario seleccionado de la tabla anterior
+    public void agregarDatosUsuario() {
+        try {
+            PreparedStatement ps = cn.prepareStatement(
+                    "SELECT * FROM Usuario WHERE username= '" + user_update + "'");
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                ID = rs.getInt("id_usuario");
+                txtActualizarID.setText(rs.getString("id_usuario"));
+                txtActualizarNom.setText(rs.getString("nombre_usuario"));
+                txtActualizarUser.setText(rs.getString("username"));
+                txtActualizarPass.setText(rs.getString("password"));
+                cmbActualizarNi.setSelectedItem(rs.getString("tipo_nivel"));
+                cmbActualizarE.setSelectedItem(rs.getString("estado"));
+            }
+            cn.close();
+        } catch (SQLException e) {
+            System.err.println("Error al cargar usuario" + e);
+            JOptionPane.showMessageDialog(null, "Error al cargar usuario!");
+        }
+    }
+
+//Este metodo actuliza los datos del usuario en la DB    
+    public void actualizarUsuario() {
+        int permisos_cmb, estatus_cmb, validacion = 0;
+        String nombre, username, pass, permisos_string = "", estado_string = "";
+
+        nombre = txtActualizarNom.getText().trim();
+        username = txtActualizarUser.getText().trim();
+        pass = txtActualizarPass.getText().trim();
+        permisos_cmb = cmbActualizarNi.getSelectedIndex() + 1;
+        estatus_cmb = cmbActualizarE.getSelectedIndex() + 1;
+
+        if (nombre.equals("")) {
+            txtActualizarNom.setBackground(Color.red);
+            validacion++;
+        }
+        if (username.equals("")) {
+            txtActualizarUser.setBackground(Color.red);
+            validacion++;
+        }
+        if (pass.equals("")) {
+            txtActualizarPass.setBackground(Color.red);
+            validacion++;
+        }
+        if (validacion == 0) {
+            if (permisos_cmb == 1) {
+                permisos_string = "Administrador";
+            } else if (permisos_cmb == 2) {
+                permisos_string = "Operador";
+            } else if (permisos_cmb == 3) {
+                permisos_string = "Recepcionista";
+            }
+
+            if (estatus_cmb == 1) {
+                estado_string = "Activo";
+            } else if (estatus_cmb == 2) {
+                estado_string = "Inactivo";
+            }
+            try {
+                PreparedStatement ps = cn.prepareStatement(
+                        "SELECT username FROM Usuario WHERE username='" + username + "'and not id_usuario = '" + ID + "'");
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    txtActualizarUser.setBackground(Color.red);
+                    JOptionPane.showMessageDialog(null, "Nombre de usuario ya existente");
+                    cn.close();
+                } else {
+                    PreparedStatement ps1 = cn.prepareStatement(
+                            "UPDATE Usuario SET nombre_usuario=?, username=?, password=?, tipo_nivel=?, estado=? "
+                            + "WHERE id_usuario= '" + ID + "'");
+                    ps1.setString(1, nombre);
+                    ps1.setString(2, username);
+                    ps1.setString(3, pass);
+                    ps1.setString(4, permisos_string);
+                    ps1.setString(5, estado_string);
+                    ps1.executeUpdate();
+                    cn.close();
+                    JOptionPane.showMessageDialog(null, "Usuario actualizado correctamente!");
+                }
+            } catch (SQLException e) {
+                System.err.println("Error al actualizar" + e);
+                JOptionPane.showMessageDialog(null, "Error al actualizar usuario!");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Debe de rellenar todos lo campos de informacion!");
+        }
+    }
 }

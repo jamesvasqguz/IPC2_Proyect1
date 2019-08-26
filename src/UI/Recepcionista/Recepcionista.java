@@ -1,53 +1,47 @@
 package UI.Recepcionista;
+//Importamos las clases y las utilidades que usaremos en la actulizacion del usuario
+
 import UI.Recepcionista.jFRegistrarPaquete;
 import UI.Administrador.Administrador;
 import UI.Inicio.FromPrincipal;
 import Class.ConectorDB;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.*;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.WindowConstants;
- 
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author jara
  */
 public class Recepcionista extends javax.swing.JFrame {
+
+//Atributos que declaramos globales para poder ser usados en los distintos metodos    
     String user, nombre_usuario;
     int sesion_usuario;
+    Connection cn = ConectorDB.conexion();
+    DefaultTableModel model = new DefaultTableModel();
+
     /**
-     * Creates new form Recepcionista
+     * Constructor
      */
     public Recepcionista() {
         initComponents();
-        setSize(700, 500);
+        setSize(850, 700);
         setResizable(false);
         setTitle("Recepcionista");
         setLocationRelativeTo(null);
         user = FromPrincipal.user;
         sesion_usuario = Administrador.sesion_usuario;
-        
-        if (sesion_usuario==1) {
-            setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        } else {
-            setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        }
-        
-        try {
-            Connection cn = ConectorDB.conexion();
-            PreparedStatement ps =cn.prepareStatement(
-                    "SELECT nombre_usuario FROM Usuario WHERE username = '"
-            + user +"'");
-        ResultSet rs = ps.executeQuery();
-        if(rs.next()){
-            nombre_usuario = rs.getString("nombre_usuario");
-            jLabel6.setText("Usuario en uso: " +nombre_usuario); 
-        }
-        } catch (SQLException e) {
-            System.err.println("Error en la conexion de DB con Recepcionista");
-            
-        }
-        
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        usuarioLogin();                                                         //Llamamos al metedo que muestra quien entra a la GUI de Recepcionista
+//Llamamos al metodo que llena la tabla principal que no brinda la informacion de los paquete que ya llegaron a su destino pero que no han sido recogidos
+        llenarTabla();
+
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -64,6 +58,9 @@ public class Recepcionista extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         btnGestionarCliente = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tableP = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setSize(new java.awt.Dimension(650, 500));
@@ -86,7 +83,7 @@ public class Recepcionista extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnRegistrarPa);
-        btnRegistrarPa.setBounds(70, 110, 160, 120);
+        btnRegistrarPa.setBounds(70, 70, 160, 120);
 
         btnControlPa.setFont(new java.awt.Font("Bitstream Vera Sans", 3, 14)); // NOI18N
         btnControlPa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Control.png"))); // NOI18N
@@ -102,7 +99,7 @@ public class Recepcionista extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnControlPa);
-        btnControlPa.setBounds(460, 110, 180, 110);
+        btnControlPa.setBounds(460, 70, 180, 110);
 
         jLabel6.setFont(new java.awt.Font("Dialog", 3, 18)); // NOI18N
         jPanel1.add(jLabel6);
@@ -110,7 +107,7 @@ public class Recepcionista extends javax.swing.JFrame {
 
         btnGestionarCliente.setFont(new java.awt.Font("Bitstream Vera Sans", 3, 14)); // NOI18N
         btnGestionarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/informationuser.png"))); // NOI18N
-        btnGestionarCliente.setText("Gestionar Clientes");
+        btnGestionarCliente.setText("Entregar Paquete");
         btnGestionarCliente.setBorder(null);
         btnGestionarCliente.setContentAreaFilled(false);
         btnGestionarCliente.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -122,7 +119,7 @@ public class Recepcionista extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnGestionarCliente);
-        btnGestionarCliente.setBounds(270, 100, 160, 130);
+        btnGestionarCliente.setBounds(270, 60, 160, 130);
 
         btnSalir.setFont(new java.awt.Font("Bitstream Vera Sans", 3, 14)); // NOI18N
         btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/back.png"))); // NOI18N
@@ -137,52 +134,115 @@ public class Recepcionista extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnSalir);
-        btnSalir.setBounds(500, 330, 120, 100);
+        btnSalir.setBounds(680, 70, 120, 100);
+
+        tableP.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tableP);
+
+        jPanel1.add(jScrollPane1);
+        jScrollPane1.setBounds(30, 270, 790, 310);
+
+        jLabel1.setFont(new java.awt.Font("Bitstream Vera Sans", 3, 18)); // NOI18N
+        jLabel1.setText("Listado de Paquetes que ya llegaron a su destino pero no han sido recogidos");
+        jPanel1.add(jLabel1);
+        jLabel1.setBounds(33, 210, 810, 40);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 827, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 850, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 497, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+//Este boton tiene la el evento de dirigirnos a la ventana que controla los paquetes
     private void btnControlPaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnControlPaActionPerformed
-        // TODO add your handling code here:
+        ControlPaquetes cp = new ControlPaquetes();
+        cp.setVisible(true);
     }//GEN-LAST:event_btnControlPaActionPerformed
-
+//Este boton tiene la el evento de dirigirnos a la ventana que registra paquetes
     private void btnRegistrarPaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarPaActionPerformed
         jFRegistrarPaquete rp = new jFRegistrarPaquete();
         rp.setVisible(true);
     }//GEN-LAST:event_btnRegistrarPaActionPerformed
-
+//Este boton tiene la el evento de dirigirnos a la ventana que entrega los paquetes que ya llegaron a su destino
     private void btnGestionarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGestionarClienteActionPerformed
-        jFGestionarCliente gc = new jFGestionarCliente();
+        jFEntregarPaquete gc = new jFEntregarPaquete();
         gc.setVisible(true);
     }//GEN-LAST:event_btnGestionarClienteActionPerformed
-
+//Este boton tiene la el evento regresar a la ventana principal
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         this.dispose();
         FromPrincipal fpn = new FromPrincipal();
         fpn.setVisible(true);
     }//GEN-LAST:event_btnSalirActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnControlPa;
     private javax.swing.JButton btnGestionarCliente;
     private javax.swing.JButton btnRegistrarPa;
     private javax.swing.JButton btnSalir;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tableP;
     // End of variables declaration//GEN-END:variables
+//Este metodo llena la tabla principal con la informacion de los paquetes
+    public void llenarTabla() {
+        try {
+            PreparedStatement ps = cn.prepareStatement(
+                    "SELECT id_paquete, nit_cliente, peso, destino, estado_paquete, localizacion FROM Paquete WHERE destino=localizacion AND estado_paquete='No entregado'");
+            ResultSet rs = ps.executeQuery();
+            tableP = new JTable(model);
+            jScrollPane1.setViewportView(tableP);
+            model.addColumn("ID Paquete");
+            model.addColumn("NIT");
+            model.addColumn("Peso");
+            model.addColumn("Destino");
+            model.addColumn("Estado Paquete");
+            model.addColumn("Localizacion");
+            while (rs.next()) {
+                Object[] ob = new Object[6];
+                for (int i = 0; i < ob.length; i++) {
+                    ob[i] = rs.getObject(i + 1);
+                }
+                model.addRow(ob);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al rellenar la tabla Observadora de Paquetes");
+            JOptionPane.showMessageDialog(null, "Error en la conexion DB con la Tabla Paquetes");
+        }
+    }
+//Este metodo guarda la variable del usuario que ingresa y muestra su nombre en el Label
+    public void usuarioLogin() {
+        try {
+            PreparedStatement ps = cn.prepareStatement(
+                    "SELECT nombre_usuario FROM Usuario WHERE username = '"
+                    + user + "'");
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                nombre_usuario = rs.getString("nombre_usuario");
+                jLabel6.setText("Usuario en uso: " + nombre_usuario);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error en la conexion de DB con Recepcionista");
+
+        }
+    }
 }

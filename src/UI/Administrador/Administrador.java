@@ -1,9 +1,10 @@
 package UI.Administrador;
+//Importamos las clases y herramientas que nos serviran en la estructuracion del codigo
+
 import UI.Administrador.jFRutas;
 import UI.Inicio.FromPrincipal;
 import java.sql.*;
 import Class.ConectorDB;
-import UI.Administrador.jFColas;
 import javax.swing.WindowConstants;
 
 /**
@@ -11,10 +12,13 @@ import javax.swing.WindowConstants;
  * @author jara
  */
 public class Administrador extends javax.swing.JFrame {
+//Atributos globales que usaremos en el desarrollo de los metedos    
+
     String user;
     String nombre_usuario;
     public static int sesion_usuario;
-    
+    Connection cn = ConectorDB.conexion();
+
     /**
      * Creates new form Administrador
      */
@@ -25,23 +29,10 @@ public class Administrador extends javax.swing.JFrame {
         setTitle("Administrador");
         setLocationRelativeTo(null);
         user = FromPrincipal.user;
-        sesion_usuario =1;
+        sesion_usuario = 1;
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        try {
-            Connection cn = ConectorDB.conexion();
-            PreparedStatement ps = cn.prepareStatement(
-                    "SELECT nombre_usuario FROM Usuario WHERE username= '"+ user +"'");
-            ResultSet rs = ps.executeQuery();
-            if(rs.next()){
-                nombre_usuario =rs.getString("nombre_usuario");
-                jLblUsu.setText("Bienvenido: " +nombre_usuario);
-            }
-        } catch (SQLException e) {
-            System.err.println("Error en la conexion de DB con Administrador");
-            
-        }  
+        login();
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -222,56 +213,53 @@ public class Administrador extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+//Este boton tiene el evento de dirigirnos a Gestionar Ruta
     private void btnAdminRecepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminRecepActionPerformed
-    jFGestionarRuta gr= new jFGestionarRuta();
-    gr.setVisible(true);
+        jFGestionarRuta gr = new jFGestionarRuta();
+        gr.setVisible(true);
     }//GEN-LAST:event_btnAdminRecepActionPerformed
-
+//Este boton tiene el evento de dirigirnos a Crear Usuario
     private void btnRegistrarUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarUActionPerformed
         jFRegistrarUsuario ru = new jFRegistrarUsuario();
         ru.setVisible(true);
     }//GEN-LAST:event_btnRegistrarUActionPerformed
-
+//Este boton tiene el evento de dirigirnos a Crear Colas
     private void btnColasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnColasActionPerformed
-       jFColas colas = new jFColas();
-       colas.setVisible(true);
+        jFColas colas = new jFColas();
+        colas.setVisible(true);
     }//GEN-LAST:event_btnColasActionPerformed
-
+//Este boton tiene el evento de dirigirnos a Administrar Usuarios
     private void btnAdministrarUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdministrarUActionPerformed
-       jFGestionarUsuario gu = new jFGestionarUsuario();
-       gu.setVisible(true);        
+        jFGestionarUsuario gu = new jFGestionarUsuario();
+        gu.setVisible(true);
     }//GEN-LAST:event_btnAdministrarUActionPerformed
-
+//Este boton tiene el evento de dirigirnos a Crear Puntos de Control
     private void btnPuntosControlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPuntosControlActionPerformed
         jFCheckpoints cp = new jFCheckpoints();
         cp.setVisible(true);
     }//GEN-LAST:event_btnPuntosControlActionPerformed
-
+//Este boton tiene el evento de dirigirnos a Crear Ruta
     private void btnRutasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRutasActionPerformed
         jFRutas r = new jFRutas();
         r.setVisible(true);
     }//GEN-LAST:event_btnRutasActionPerformed
-
+//Este boton tiene el evento de dirigirnos a Gestionar PC
     private void btnAdminOpeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminOpeActionPerformed
         jFGestionarPuntoControl gpc = new jFGestionarPuntoControl();
         gpc.setVisible(true);
     }//GEN-LAST:event_btnAdminOpeActionPerformed
-
+//Este boton tiene el evento de dirigirnos al FROM Principal
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         this.dispose();
         FromPrincipal fpn = new FromPrincipal();
         fpn.setVisible(true);
     }//GEN-LAST:event_btnSalirActionPerformed
-
+//Este boton tiene el evento de dirigirnos a los Reportes
     private void btnReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportesActionPerformed
-    jFReportes rps = new jFReportes();
-    rps.setVisible(true);
+        jFReportes rps = new jFReportes();
+        rps.setVisible(true);
     }//GEN-LAST:event_btnReportesActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdminOpe;
     private javax.swing.JButton btnAdminRecep;
@@ -285,4 +273,18 @@ public class Administrador extends javax.swing.JFrame {
     private javax.swing.JLabel jLblUsu;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
+//Metodo que permite ver quien ingreso a la interfaz Administrador
+    public void login() {
+        try {
+            PreparedStatement ps = cn.prepareStatement(
+                    "SELECT nombre_usuario FROM Usuario WHERE username= '" + user + "'");
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                nombre_usuario = rs.getString("nombre_usuario");
+                jLblUsu.setText("Bienvenido: " + nombre_usuario);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error en la conexion de DB con Administrador");
+        }
+    }
 }

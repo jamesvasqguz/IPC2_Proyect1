@@ -22,7 +22,7 @@ public class Reportes extends javax.swing.JInternalFrame {
         initComponents();
         setSize(800, 500);
         setResizable(false);
-
+        
     }
 
     /**
@@ -70,16 +70,16 @@ public class Reportes extends javax.swing.JInternalFrame {
     public void tableGanancias() {
         try {
             PreparedStatement ps = cn.prepareStatement(
-                    "SELECT ruta, costo, precio, ganancias FROM Paquete");
+                    "SELECT ruta, costo, precio FROM Paquete");
             ResultSet rs = ps.executeQuery();
             table = new JTable(model);
             ScrollPane.setViewportView(table);
             model.addColumn("Ruta");
             model.addColumn("Costo");
             model.addColumn("Ingreso");
-            model.addColumn("Ganancias");
+            
             while (rs.next()) {
-                Object[] ob = new Object[6];
+                Object[] ob = new Object[3];
                 for (int i = 0; i < ob.length; i++) {
                     ob[i] = rs.getObject(i + 1);
                 }

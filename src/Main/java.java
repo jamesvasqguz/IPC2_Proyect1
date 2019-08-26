@@ -7,14 +7,11 @@ import Class.*;
  */
 public class java {
 
-    /**
-     * @param args the command line arguments
-     */
+//Metodo que ejecuta todo el programa
     public static void main(String[] args) {
+//El programa inicia en el FROM principal
         FromPrincipal ui = new FromPrincipal();
-        ui.setVisible(true);
-        
-      
+        ui.setVisible(true);  
     }
 
 }

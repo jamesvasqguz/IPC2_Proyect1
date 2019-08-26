@@ -1,5 +1,5 @@
 package UI.Operador;
-
+//Importamos el JFrame del From
 import UI.Inicio.FromPrincipal;
 
 /**
@@ -9,7 +9,7 @@ import UI.Inicio.FromPrincipal;
 public class Operador extends javax.swing.JFrame {
 
     /**
-     * Creates new form Operador
+     * Constructor
      */
     public Operador() {
         initComponents();
@@ -91,21 +91,18 @@ public class Operador extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+//Este boton tiene el evento de dirigirnos a JFrame Procesar Paquete
     private void btnProcesarPAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcesarPAActionPerformed
         jFProcesarPaquete procesar = new jFProcesarPaquete();
         procesar.setVisible(true);
     }//GEN-LAST:event_btnProcesarPAActionPerformed
-
+//Este boton tiene le evento de cerra la ventana de Operador y redirige al From Principal
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         this.dispose();
         FromPrincipal f = new FromPrincipal();
         f.setVisible(true);
     }//GEN-LAST:event_btnSalirActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnProcesarPA;
     private javax.swing.JButton btnSalir;
