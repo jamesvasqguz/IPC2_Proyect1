@@ -1,6 +1,6 @@
 package Main;
+import UI.Inicio.FromPrincipal;
 import Class.*;
-import UI.*;
 /**
  *
  * @author jara

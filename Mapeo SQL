@@ -10,6 +10,8 @@ KEY(prioridad),
 estado_paquete VARCHAR(50) NOT NULL,
 precio DECIMAL(9,2) NOT NULL,
 localizacion VARCHAR(50) NOT NULL,
+tiempoRuta INT NOT NULL,
+costo DECIMAL(9,2) NOT NULL,
 CONSTRAINT PK_ID_PAQUETE PRIMARY KEY(id_paquete),
 CONSTRAINT FK_NIT_CLIENTE FOREIGN KEY(nit_cliente)
 REFERENCES Clientes(nit_cliente)
