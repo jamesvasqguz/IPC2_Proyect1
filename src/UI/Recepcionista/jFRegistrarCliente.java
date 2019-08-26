@@ -104,10 +104,7 @@ public class jFRegistrarCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegistrarClientActionPerformed
 //Este evento en el campo donde ingresan el nombre no permite ingresar ningun numero
     private void txtNombreClienteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreClienteKeyTyped
-        char c = evt.getKeyChar();
-        if (c < 'a' || c > 'z') {
-            evt.consume();
-        }
+   
     }//GEN-LAST:event_txtNombreClienteKeyTyped
 //Este evento en el campo donde ingresan el nit no permite agregar letras
     private void txtNitClienteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNitClienteKeyTyped

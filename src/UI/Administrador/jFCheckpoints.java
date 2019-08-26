@@ -156,10 +156,7 @@ public class jFCheckpoints extends javax.swing.JFrame {
     }//GEN-LAST:event_txtSizeKeyTyped
 
     private void txtNombrePCKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombrePCKeyTyped
-        char c = evt.getKeyChar();
-        if (c < 'a' || c > 'z') {
-            evt.consume();
-        }
+
     }//GEN-LAST:event_txtNombrePCKeyTyped
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

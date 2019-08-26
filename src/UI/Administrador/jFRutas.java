@@ -142,17 +142,11 @@ public class jFRutas extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCrearRutaActionPerformed
 //Este evento perimte no ingresar numeros en el nombre de la ruta
     private void txtNombreRKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreRKeyTyped
-        char c = evt.getKeyChar();
-        if (c < 'a' || c > 'z') {
-            evt.consume();
-        }
+    
     }//GEN-LAST:event_txtNombreRKeyTyped
 //Este evento perimte no ingresar numeros en el nombre de la ruta
     private void txtDestinoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDestinoKeyTyped
-        char c = evt.getKeyChar();
-        if (c < 'a' || c > 'z') {
-            evt.consume();
-        }
+        
     }//GEN-LAST:event_txtDestinoKeyTyped
 
     private void txtPrecioDestinoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioDestinoKeyTyped

@@ -118,10 +118,7 @@ public class jFRegistrarUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegistrarNueUsuarioActionPerformed
 //Este boton tiene el evento de validar que se escribe en los campos
     private void jTFNueUsuarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTFNueUsuarioKeyTyped
-        char c = evt.getKeyChar();
-        if (c < 'a' || c > 'z') {
-            evt.consume();
-        }
+  
     }//GEN-LAST:event_jTFNueUsuarioKeyTyped
 
     private void jTFNueUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTFNueUsuarioActionPerformed
@@ -182,9 +179,9 @@ public class jFRegistrarUsuario extends javax.swing.JFrame {
             if (rs.next()) {
                 jTFNueUserName.setBackground(Color.red);
                 JOptionPane.showMessageDialog(null, "Nombre de usuario ya existe! \n Prueba con otro");
-                cn.close();
+                
             } else {
-                cn.close();
+                
                 if (validacion == 0) {
                     try {
                         PreparedStatement ps1 = cn.prepareStatement("INSERT INTO Usuario VALUES(?,?,?,?,?,?)");
@@ -195,7 +192,7 @@ public class jFRegistrarUsuario extends javax.swing.JFrame {
                         ps1.setString(5, permisos_string);
                         ps1.setString(6, "Activo");
                         ps1.executeUpdate();
-                        cn.close();
+                        
                         clear();
                         jTFNuePass.setBackground(Color.green);
                         jTFNueUserName.setBackground(Color.green);

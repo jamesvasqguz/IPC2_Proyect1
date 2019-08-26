@@ -179,10 +179,7 @@ public class jFActualizarPunto extends javax.swing.JFrame {
     }//GEN-LAST:event_txtCantKeyTyped
 
     private void txtNombrePuntoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombrePuntoKeyTyped
-     char c = evt.getKeyChar();
-        if (c < 'a' || c > 'z') {
-            evt.consume();
-        }
+
     }//GEN-LAST:event_txtNombrePuntoKeyTyped
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

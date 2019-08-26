@@ -151,9 +151,6 @@ public class jFProcesarPaquete extends javax.swing.JFrame {
         } catch (SQLException e) {
             System.err.println("Error al actulizar paquete " + e);
         }
-//        if(loca==des){
-//        updateGanancias();
-//        }
         
     }//GEN-LAST:event_btnProcesarActionPerformed
 //Este evento me detecta cuando cambio de item en los combosB

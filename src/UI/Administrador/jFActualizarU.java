@@ -180,10 +180,7 @@ public class jFActualizarU extends javax.swing.JFrame {
     }//GEN-LAST:event_txtActualizarIDKeyTyped
 
     private void txtActualizarNomKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtActualizarNomKeyTyped
-       char c = evt.getKeyChar();
-        if (c < 'a' || c > 'z') {
-            evt.consume();
-        }
+    
     }//GEN-LAST:event_txtActualizarNomKeyTyped
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
